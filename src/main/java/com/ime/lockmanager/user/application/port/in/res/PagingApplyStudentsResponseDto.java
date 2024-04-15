@@ -6,10 +6,10 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public class AllApplyingStudentPageResponseDto {
+public class PagingApplyStudentsResponseDto {
     private int currentPage;
     private int totalPage;
-    private List<AllApplyingStudentDto> applicant;
+    private List<ApplyingStudentsDto> applicant;
     public AllApplyingStudentPageResponse toResponse(){
         return AllApplyingStudentPageResponse.builder()
                 .applicant(applicant)

@@ -8,11 +8,12 @@ import lombok.Getter;
 @Builder
 @Getter
 public class UserTierResponseDto {
-    private UserTier userTier;
+    private Boolean isApprove;
 
     public UserTierResponse toResponse() {
         return UserTierResponse.builder()
-                .userTier(userTier)
+                .isApprove(isApprove)
                 .build();
     }
+
 }

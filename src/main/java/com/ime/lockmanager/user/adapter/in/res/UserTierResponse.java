@@ -9,6 +9,6 @@ import lombok.Getter;
 @Builder
 public class UserTierResponse {
     @Schema(description = "학생의 변경된 납부여부")
-    private UserTier userTier;
+    private Boolean isApprove;
 
 }

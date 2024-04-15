@@ -36,13 +36,11 @@ public class UserQuerydslRepository{
         return new PageImpl<>(applicant, pageable, total);
     }
 
-    public Page<User> findAllByMajorASC(Major userMajor,String search, Pageable pageable) {
+    public Page<User> pagingAndSearchUserInMajorASC(Major userMajor, String search, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
-
         if(search != null) {
             builder.and(user.name.eq(search).or(user.studentNum.eq(search)));
         }
-
         List<User> userInfos = jpaQueryFactory.selectFrom(user)
                 .orderBy(user.studentNum.asc())
                 .offset(pageable.getOffset())

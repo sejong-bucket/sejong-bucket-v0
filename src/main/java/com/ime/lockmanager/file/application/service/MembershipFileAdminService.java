@@ -2,12 +2,10 @@ package com.ime.lockmanager.file.application.service;
 
 import com.ime.lockmanager.common.format.exception.file.InValidCheckingException;
 import com.ime.lockmanager.common.format.exception.file.NotValidExcelFormatException;
-import com.ime.lockmanager.common.format.exception.major.majordetail.NotFoundMajorDetailException;
 import com.ime.lockmanager.common.format.exception.user.NotFoundUserException;
 import com.ime.lockmanager.file.application.port.in.usecase.MembershipFileAdminUseCase;
-import com.ime.lockmanager.major.application.port.out.majordetail.MajorDetailQueryPort;
 import com.ime.lockmanager.major.domain.MajorDetail;
-import com.ime.lockmanager.user.application.port.in.UserUseCase;
+import com.ime.lockmanager.user.application.port.in.UserCommandUseCase;
 import com.ime.lockmanager.user.application.port.in.dto.UpdateUserDueInfoDto;
 import com.ime.lockmanager.user.application.port.out.UserQueryPort;
 import com.ime.lockmanager.user.domain.User;
@@ -33,7 +31,7 @@ import java.util.stream.IntStream;
 @Service
 @RequiredArgsConstructor
 public class MembershipFileAdminService implements MembershipFileAdminUseCase {
-    private final UserUseCase userUseCase;
+    private final UserCommandUseCase userCommandUseCase;
     private final UserQueryPort userQueryPort;
 
     @Override
@@ -97,7 +95,7 @@ public class MembershipFileAdminService implements MembershipFileAdminUseCase {
                 })
                 .filter(Objects::nonNull) // Filter out null values for empty cases
                 .collect(Collectors.toList());
-        userUseCase.updateUserDueInfoOrSave(updateUserDueInfoList);
+        userCommandUseCase.updateUserDueInfoOrSave(updateUserDueInfoList);
     }
 
     private void checkBlank(String studentNum, String studentName, String checkDues) {

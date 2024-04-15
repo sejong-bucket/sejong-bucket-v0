@@ -1,6 +1,6 @@
 package com.ime.lockmanager.user.adapter.in.res;
 
-import com.ime.lockmanager.user.application.port.in.res.AllApplyingStudentDto;
+import com.ime.lockmanager.user.application.port.in.res.ApplyingStudentsDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,5 +17,5 @@ public class AllApplyingStudentPageResponse {
     @Schema(description = "페이지네이션 현재 페이지의 데이터수")
     private int currentElementSize;
     @Schema(description = "신청자 정보")
-    private List<AllApplyingStudentDto> applicant;
+    private List<ApplyingStudentsDto> applicant;
 }

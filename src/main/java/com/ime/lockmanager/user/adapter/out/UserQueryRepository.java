@@ -24,8 +24,8 @@ public class UserQueryRepository implements UserQueryPort, AuthToUserQueryPort {
     }
 
     @Override
-    public Page<User> findAllByMajorASC(Major major, String search, Pageable pageable) {
-        return userQuerydslRepository.findAllByMajorASC(major, search, pageable);
+    public Page<User> pagingByMajorASC(Major major, String search, Pageable pageable) {
+        return userQuerydslRepository.pagingAndSearchUserInMajorASC(major, search, pageable);
     }
 
     @Override
@@ -48,16 +48,8 @@ public class UserQueryRepository implements UserQueryPort, AuthToUserQueryPort {
         return userJpaRepository.findAll();
     }
 
-
-    @Override
-    public Optional<User> findByStudentNameAndStudentNum(String studentName, String studentNum) {
-        return userJpaRepository.findByNameAndStudentNum(studentName, studentNum);
-    }
-
     @Override
     public Optional<User> findByStudentNum(String studentNum) {
         return userJpaRepository.findByStudentNum(studentNum);
     }
-
-
 }

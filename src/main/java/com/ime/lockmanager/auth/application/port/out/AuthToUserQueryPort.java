@@ -7,7 +7,5 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 public interface AuthToUserQueryPort {
-    Optional<User> findByStudentNameAndStudentNum(String studentName,String studentNum);
-
     Optional<User>findByStudentNum(String studentNum);
 }
