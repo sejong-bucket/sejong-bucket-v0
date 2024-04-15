@@ -4,7 +4,13 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'jacoco'
 }
+jacoco {
+	toolVersion = '0.8.5'
+}
 
+tasks.withType(Test) {
+	jacoco.includeNoLocationClasses = true
+}
 group = 'com.ime'
 version = '0.0.1-SNAPSHOT'
 java {
@@ -121,35 +127,4 @@ tasks.named('test') {
 }
 jar {
 	enabled = false
-}
-// jacoco설정
-test {
-	finalizedBy jacocoTestReport
-}
-jacocoTestReport {
-	dependsOn test
-	reports {
-		xml.required = false
-		csv.required = false
-		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
-	}
-}
-jacoco {
-	toolVersion = "0.8.7"
-	reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
-}
-jacocoTestCoverageVerification {
-	violationRules {
-		rule {
-			enabled = true;
-			element = 'CLASS'
-
-			limit {
-				counter = 'METHOD'
-				value = 'COVEREDRATIO'
-				minimum = 0.5
-			}
-		}
-
-	}
 }

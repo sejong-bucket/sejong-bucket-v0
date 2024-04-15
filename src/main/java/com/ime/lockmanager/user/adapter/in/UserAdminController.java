@@ -6,7 +6,8 @@ import com.ime.lockmanager.user.adapter.in.req.ModifiedUserInfoRequest;
 import com.ime.lockmanager.user.adapter.in.res.AllApplyingStudentPageResponse;
 import com.ime.lockmanager.user.adapter.in.res.UserInfoAdminPageResponse;
 import com.ime.lockmanager.user.adapter.in.res.UserTierResponse;
-import com.ime.lockmanager.user.application.port.in.UserUseCase;
+import com.ime.lockmanager.user.application.port.in.UserQueryUseCase;
+import com.ime.lockmanager.user.application.port.in.UserCommandUseCase;
 import com.ime.lockmanager.user.application.port.in.req.FindAllUserRequestDto;
 import com.ime.lockmanager.user.application.port.out.res.AllUserInfoForAdminResponseDto;
 import io.swagger.annotations.ApiImplicitParam;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -28,7 +28,8 @@ import java.util.stream.Collectors;
 @RequestMapping("${api.admin.prefix}")
 class UserAdminController {
 
-    private final UserUseCase userUseCase;
+    private final UserCommandUseCase userCommandUseCase;
+    private final UserQueryUseCase userQueryUseCase;
 
     @ApiOperation(
             value = "모든 사용자의 정보를 조회",
@@ -41,11 +42,10 @@ class UserAdminController {
             , dataType = "int"
             , defaultValue = "0")
     @GetMapping("/majors/{majorId}/users")
-    public SuccessResponse<UserInfoAdminPageResponse> adminInfo(@ApiIgnore Authentication authentication,
-                                                                @PathVariable Long majorId,
+    public SuccessResponse<UserInfoAdminPageResponse> adminInfo(@PathVariable Long majorId,
                                                                 @RequestParam(name = "page", defaultValue = "0") int page,
-                                                                @RequestParam(name = "search",required = false) String search) {
-        Page<AllUserInfoForAdminResponseDto> allUserInfo = userUseCase.findAllUserInfo(FindAllUserRequestDto
+                                                                @RequestParam(name = "search", required = false) String search) {
+        Page<AllUserInfoForAdminResponseDto> allUserInfo = userQueryUseCase.findAllUserInfo(FindAllUserRequestDto
                 .of(majorId, search, page));
         return new SuccessResponse(
                 UserInfoAdminPageResponse.builder()
@@ -64,11 +64,9 @@ class UserAdminController {
             value = "수정된 사용자의 정보를 받아 실제 dB에 업데이트해주는 API(관리자용)"
     )
     @PatchMapping("/users")
-    public SuccessResponse modifiedUserInfo(@ApiIgnore Principal principal,
-                                            @Valid @RequestBody ModifiedUserInfoRequest modifiedUserInfoRequest)
+    public SuccessResponse modifiedUserInfo(@Valid @RequestBody ModifiedUserInfoRequest modifiedUserInfoRequest)
             throws Exception {
-        log.info("{} : 사용자 정보 수정(관리자)", principal.getName());
-        userUseCase.modifiedUserInfo(modifiedUserInfoRequest.toRequestDto());
+        userCommandUseCase.modifiedUserInfo(modifiedUserInfoRequest.toRequestDto());
         return SuccessResponse.ok();
     }
 
@@ -83,7 +81,7 @@ class UserAdminController {
     public SuccessResponse<AllApplyingStudentPageResponse> findAllApplyingStudent(@ApiIgnore Authentication authentication,
                                                                                   @RequestParam(name = "page",
                                                                                           defaultValue = "0") int page) {
-        AllApplyingStudentPageResponse response = userUseCase.findAllApplying(authentication.getName(), page)
+        AllApplyingStudentPageResponse response = userQueryUseCase.findApplyStudentsInMajorByPage(authentication.getName(), page)
                 .toResponse();
         return new SuccessResponse(response);
     }
@@ -95,10 +93,9 @@ class UserAdminController {
             , required = true
             , dataType = "boolean")
     @PostMapping("/users/tier/apply")
-    public SuccessResponse<UserTierResponse> determineApplying(@ApiIgnore Authentication authentication,
-                                                               @Valid @RequestBody DetermineApplyingRequest request,
+    public SuccessResponse<UserTierResponse> determineApplying(@Valid @RequestBody DetermineApplyingRequest request,
                                                                @RequestParam(name = "isApprove") boolean isApprove) {
-        UserTierResponse response = userUseCase.determineApplying(request.toRequestDto(), isApprove).toResponse();
+        UserTierResponse response = userCommandUseCase.determineApplying(request.toRequestDto(), isApprove).toResponse();
         return new SuccessResponse(response);
     }
 }
