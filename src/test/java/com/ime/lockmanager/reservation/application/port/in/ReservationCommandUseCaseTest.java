@@ -52,7 +52,7 @@ import static java.time.LocalDateTime.now;
 @Slf4j
 @ActiveProfiles("test")
 @SpringBootTest
-class ReservationUseCaseTest {
+class ReservationCommandUseCaseTest {
     @Autowired
     private LockerDetailQueryPort lockerDetailQueryPort;
     @Autowired
@@ -66,7 +66,7 @@ class ReservationUseCaseTest {
     @Autowired
     private MajorDetailQueryPort majorDetailQueryPort;
     @Autowired
-    private ReservationUseCase reservationUseCase;
+    private ReservationCommandUseCase reservationCommandUseCase;
     @Autowired
     private LockerQueryPort lockerQueryPort;
     @Autowired
@@ -139,7 +139,7 @@ class ReservationUseCaseTest {
                 .findByLockerId(savedLocker.getCreatedLockerId());
 
         for (int i = 0; i < userIds.size(); i++) {
-            reservationUseCase.reserveForUser(LockerRegisterRequestDto.of(major.getId(), userIds.get(i), lockerDetails.get(i).getId()));
+            reservationCommandUseCase.reserveForUser(LockerRegisterRequestDto.of(major.getId(), userIds.get(i), lockerDetails.get(i).getId()));
         }
 
 
@@ -158,7 +158,7 @@ class ReservationUseCaseTest {
                         try {
                             Reservation reservation = reservationQueryPort.findByUserId(userId).orElseThrow(NullPointerException::new);
 
-                            reservationUseCase.changeReservation(ChangeReservationRequestDto.of(lockerDetails.get(userIds.size()).getId(),
+                            reservationCommandUseCase.changeReservation(ChangeReservationRequestDto.of(lockerDetails.get(userIds.size()).getId(),
                                     reservation.getLockerDetail().getId(), userId, major.getId()));
 
                         } catch (Exception e) {
@@ -246,7 +246,7 @@ class ReservationUseCaseTest {
             service.execute(
                     () -> {
                         try {
-                            reservationUseCase.reserveForUser(LockerRegisterRequestDto.builder()
+                            reservationCommandUseCase.reserveForUser(LockerRegisterRequestDto.builder()
                                     .userId(userId)
                                     .lockerDetailId(lockerDetails.get(0).getId())
                                     .majorId(major.getId())

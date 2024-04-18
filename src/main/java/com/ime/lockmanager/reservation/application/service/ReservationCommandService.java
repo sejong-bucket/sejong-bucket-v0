@@ -7,13 +7,12 @@ import com.ime.lockmanager.common.format.exception.reservation.NotMatchUserTierA
 import com.ime.lockmanager.common.format.exception.user.AlreadyReservedUserException;
 import com.ime.lockmanager.common.format.exception.user.InvalidReservedStatusException;
 import com.ime.lockmanager.common.format.exception.user.NotFoundUserException;
-import com.ime.lockmanager.common.sse.SseEmitterService;
 import com.ime.lockmanager.locker.application.port.in.req.LockerRegisterRequestDto;
 import com.ime.lockmanager.locker.application.port.in.res.LockerRegisterResponseDto;
 import com.ime.lockmanager.locker.application.port.out.LockerDetailQueryPort;
 import com.ime.lockmanager.locker.domain.locker.Locker;
 import com.ime.lockmanager.locker.domain.lockerdetail.LockerDetail;
-import com.ime.lockmanager.reservation.application.port.in.ReservationUseCase;
+import com.ime.lockmanager.reservation.application.port.in.ReservationCommandUseCase;
 import com.ime.lockmanager.reservation.application.port.in.req.ChangeReservationRequestDto;
 import com.ime.lockmanager.reservation.application.port.out.ReservationCommandPort;
 import com.ime.lockmanager.reservation.application.port.out.ReservationQueryPort;
@@ -25,11 +24,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.*;
 
-import static com.ime.lockmanager.common.sse.SseEmitterService.sendEvent;
 import static java.util.stream.Collectors.toList;
 
 
@@ -37,7 +34,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class ReservationService implements ReservationUseCase {
+public class ReservationCommandService implements ReservationCommandUseCase {
     private final UserQueryPort userQueryPort;
     private final ReservationQueryPort reservationQueryPort;
     private final LockerDetailQueryPort lockerDetailQueryPort;
@@ -66,34 +63,43 @@ public class ReservationService implements ReservationUseCase {
     @Override
     @DistributeLock(identifier = LOCKER_KEY, key = "#dto.lockerDetailId")
     public LockerRegisterResponseDto reserveForAdmin(LockerRegisterRequestDto dto) throws Exception {
-        User user = userQueryPort.findById(dto.getUserId()).orElseThrow(NotFoundUserException::new);
-        LockerDetail lockerDetail = lockerDetailQueryPort.findByIdWithLocker(dto.getLockerDetailId())
-                .orElseThrow(InvalidLockerDetailException::new);
+        User user = getUserById(dto.getUserId());
+        LockerDetail lockerDetail = getLockerDetailById(dto.getLockerDetailId());
         log.info("(사용자)예약 시작 : [학번 {}, 사물함 번호 {}]", user.getStudentNum(), lockerDetail.getLockerNum());
-        Locker locker = lockerDetail.getLocker();
+        Locker locker = getLockerFromLockerDetail(lockerDetail);
         verifyCommonConditionForReserve(user, lockerDetail, locker);
         reservationCommandPort.registerLocker(user, lockerDetail);
         lockerDetail.reserve();
         return LockerRegisterResponseDto.of((lockerDetail.getLockerNum()),
                 user.getStudentNum(),
-                lockerDetail.getLocker().getName());
+                getLockerFromLockerDetail(lockerDetail).getName());
     }
 
     @Override
     @DistributeLock(identifier = LOCKER_KEY, key = "#dto.lockerDetailId")
     public LockerRegisterResponseDto reserveForUser(LockerRegisterRequestDto dto) throws Exception {
-        User user = userQueryPort.findById(dto.getUserId()).orElseThrow(NotFoundUserException::new);
-        LockerDetail lockerDetail = lockerDetailQueryPort.findByIdWithLocker(dto.getLockerDetailId())
-                .orElseThrow(InvalidLockerDetailException::new);
+        User user = getUserById(dto.getUserId());
+        LockerDetail lockerDetail = getLockerDetailById(dto.getLockerDetailId());
         log.info("(사용자)예약 시작 : [학번 {}, 사물함 번호 {}]", user.getStudentNum(), lockerDetail.getLockerNum());
-        Locker locker = lockerDetail.getLocker();
+        Locker locker = getLockerFromLockerDetail(lockerDetail);
         verifyDistinctConditionForReserve(locker);
         runReserve(user, lockerDetail, locker);
-//        sendSSEMsg(dto.getMajorId(), registerLockerId, "reservedLockerDetailId");
-
         log.info("예약 완료 : [학번 {}, 사물함 번호 {}]", user.getStudentNum(), lockerDetail.getLockerNum());
         return LockerRegisterResponseDto
                 .of(lockerDetail.getLockerNum(), user.getStudentNum(), locker.getName());
+    }
+
+    private User getUserById(Long userId) {
+        return userQueryPort.findById(userId).orElseThrow(NotFoundUserException::new);
+    }
+
+    private LockerDetail getLockerDetailById(Long lockerDetailId) {
+        return lockerDetailQueryPort.findByIdWithLocker(lockerDetailId)
+                .orElseThrow(InvalidLockerDetailException::new);
+    }
+
+    private Locker getLockerFromLockerDetail(LockerDetail lockerDetail) {
+        return lockerDetail.getLocker();
     }
 
     private Long runReserve(User user, LockerDetail lockerDetail, Locker locker) {
@@ -151,7 +157,7 @@ public class ReservationService implements ReservationUseCase {
 
     public Long cancelLockerByStudentNum(UserCancelLockerRequestDto cancelLockerDto) {
         log.info("{} : 사물함 취소시작", cancelLockerDto.getUserId());
-        User user = userQueryPort.findById(cancelLockerDto.getUserId()).orElseThrow(NotFoundUserException::new);
+        User user = getUserById(cancelLockerDto.getUserId());
         Reservation reservation = reservationQueryPort
                 .findAllByUserIdAndLockerDetailId(user.getId(),
                         cancelLockerDto.getLockerDetailId()).orElseThrow(NotFoundReservationException::new);
@@ -165,16 +171,13 @@ public class ReservationService implements ReservationUseCase {
     @Override
     @DistributeLock(identifier = LOCKER_KEY, key = "#dto.newLockerDetailId")
     public Long changeReservation(ChangeReservationRequestDto dto) {
-        User user = userQueryPort.findById(dto.getUserId())
-                .orElseThrow(NotFoundUserException::new);
+        User user = getUserById(dto.getUserId());
 
-        LockerDetail newLockerDetail = lockerDetailQueryPort.findByIdWithLocker(dto.getNewLockerDetailId())
-                .orElseThrow(InvalidLockerDetailException::new);
+        LockerDetail newLockerDetail = getLockerDetailById(dto.getNewLockerDetailId());
 
-        LockerDetail originLockerDetail = lockerDetailQueryPort.findByIdWithLocker(dto.getOriginLockerDetailId())
-                .orElseThrow(InvalidLockerDetailException::new);
+        LockerDetail originLockerDetail = getLockerDetailById(dto.getOriginLockerDetailId());
 
-        Locker newLocker = newLockerDetail.getLocker();
+        Locker newLocker = getLockerFromLockerDetail(newLockerDetail);
 
         // 1. 변경하고자하는 사물함이 예약이 안되었는지
         verifyLockerConditions(user, newLockerDetail, newLocker);

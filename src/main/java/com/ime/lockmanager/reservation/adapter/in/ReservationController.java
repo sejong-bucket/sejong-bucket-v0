@@ -6,7 +6,7 @@ import com.ime.lockmanager.locker.adapter.in.res.LockerRegisterResponse;
 import com.ime.lockmanager.reservation.adapter.in.req.LockerDetailCancelRequest;
 import com.ime.lockmanager.reservation.adapter.in.res.CancelLockerDetailResponse;
 import com.ime.lockmanager.reservation.adapter.in.res.ChangeReservationResponse;
-import com.ime.lockmanager.reservation.application.port.in.ReservationUseCase;
+import com.ime.lockmanager.reservation.application.port.in.ReservationCommandUseCase;
 import com.ime.lockmanager.reservation.application.port.in.req.ChangeReservationRequestDto;
 import com.ime.lockmanager.user.application.port.in.req.UserCancelLockerRequestDto;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +23,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("${api.user.prefix}")
 public class ReservationController {
-    private final ReservationUseCase reservationUseCase;
+    private final ReservationCommandUseCase reservationCommandUseCase;
 
     @ApiOperation(
             value = "사물함 취소",
@@ -34,7 +34,7 @@ public class ReservationController {
                                                                     @PathVariable Long lockerDetailId,
                                                                     @Valid @RequestBody LockerDetailCancelRequest request) {
         log.info("{} : 사물함 취소", principal.getName());
-        Long cancelLockerByStudentId = reservationUseCase.cancelLockerByStudentNum(
+        Long cancelLockerByStudentId = reservationCommandUseCase.cancelLockerByStudentNum(
                 UserCancelLockerRequestDto.of(request.getUserId(), lockerDetailId)
         );
         return new SuccessResponse(CancelLockerDetailResponse.builder()
@@ -54,7 +54,7 @@ public class ReservationController {
             @PathVariable Long majorId) throws Exception {
 //        log.info("{} : 시믈함 예약진행", principal.getName());
         LockerRegisterResponse lockerRegisterResponse = LockerRegisterResponse.fromResponse(
-                reservationUseCase.reserveForUser(LockerRegisterRequestDto.of(majorId, userId, lockerDetailId))
+                reservationCommandUseCase.reserveForUser(LockerRegisterRequestDto.of(majorId, userId, lockerDetailId))
         );
         log.info("{} : {}의 {}번 예약완료",
                 lockerRegisterResponse.getStudentNum(),
@@ -74,7 +74,7 @@ public class ReservationController {
                                                                         @PathVariable Long majorId,
                                                                         @RequestParam Long newLockerDetailId) {
         log.info("{} : 사물함 취소", principal.getName());
-        Long changedLockerDetailId = reservationUseCase.changeReservation(
+        Long changedLockerDetailId = reservationCommandUseCase.changeReservation(
                 ChangeReservationRequestDto.of(newLockerDetailId, originLockerDtailId, userId, majorId)
         );
         return new SuccessResponse(ChangeReservationResponse.builder()

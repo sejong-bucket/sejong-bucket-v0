@@ -5,7 +5,7 @@ import com.ime.lockmanager.locker.application.port.in.res.LockerRegisterResponse
 import com.ime.lockmanager.reservation.application.port.in.req.ChangeReservationRequestDto;
 import com.ime.lockmanager.user.application.port.in.req.UserCancelLockerRequestDto;
 
-public interface ReservationUseCase {
+public interface ReservationCommandUseCase {
     Long changeReservation(ChangeReservationRequestDto requestDto);
 
     LockerRegisterResponseDto reserveForUser(LockerRegisterRequestDto lockerRegisterRequestDto) throws Exception;
