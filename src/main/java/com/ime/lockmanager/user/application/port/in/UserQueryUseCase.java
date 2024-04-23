@@ -11,6 +11,6 @@ public interface UserQueryUseCase {
     UserInfoQueryResponseDto findUserInfoByStudentNum(UserInfoRequestDto userRequestDto);
 
     Page<AllUserInfoForAdminResponseDto> findAllUserInfo(FindAllUserRequestDto requestDto);
-    PagingApplyStudentsResponseDto findApplyStudentsInMajorByPage(String studentNum, int page);
+    PagingApplyStudentsResponseDto findApplyStudentsInMajorByPage(Long userId, int page);
 
 }

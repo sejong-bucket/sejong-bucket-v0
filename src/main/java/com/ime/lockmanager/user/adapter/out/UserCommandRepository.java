@@ -14,8 +14,8 @@ public class UserCommandRepository implements UserCommandPort, AuthToUserCommand
     private final UserJpaRepository userJpaRepository;
 
     @Override
-    public void saveAll(List<User> users) {
-        userJpaRepository.saveAll(users);
+    public List<User> saveAll(List<User> users) {
+        return userJpaRepository.saveAll(users);
     }
 
     @Override

@@ -16,7 +16,7 @@ public enum UserState {
         if (state.equals(ATTEND.krName)) {
             return ATTEND;
         } else if (state.equals(REST.krName)) {
-            return ATTEND;
+            return REST;
         }
         return GRADUATE;
     }

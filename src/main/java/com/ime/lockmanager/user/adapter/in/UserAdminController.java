@@ -77,11 +77,10 @@ class UserAdminController {
             , dataType = "int"
             , defaultValue = "0")
     @ApiOperation(value = "학생회비 납부 신청자 조회")
-    @GetMapping("/users/tier/apply")
-    public SuccessResponse<AllApplyingStudentPageResponse> findAllApplyingStudent(@ApiIgnore Authentication authentication,
-                                                                                  @RequestParam(name = "page",
-                                                                                          defaultValue = "0") int page) {
-        AllApplyingStudentPageResponse response = userQueryUseCase.findApplyStudentsInMajorByPage(authentication.getName(), page)
+    @GetMapping("/users/{userId}tier/apply")
+    public SuccessResponse<AllApplyingStudentPageResponse> findAllApplyingStudent(@PathVariable Long userId,@RequestParam(name = "page",
+            defaultValue = "0") int page) {
+        AllApplyingStudentPageResponse response = userQueryUseCase.findApplyStudentsInMajorByPage(userId, page)
                 .toResponse();
         return new SuccessResponse(response);
     }

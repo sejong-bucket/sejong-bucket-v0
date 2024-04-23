@@ -18,16 +18,23 @@ public class UserQueryRepository implements UserQueryPort, AuthToUserQueryPort {
     private final UserJpaRepository userJpaRepository;
     private final UserQuerydslRepository userQuerydslRepository;
 
+    /**
+     * Todo
+     * 어드민 기능 추후 테스트코드 작성예정
+     */
     @Override
     public Page<User> findApplicantsByMajorOrderByStudentNumAsc(Major major, Pageable pageable) {
         return userQuerydslRepository.findApplicantsByMajorOrderByStudentNumAsc(major, pageable);
     }
 
+    /**
+     * Todo
+     * 데이터 조회에 에러가 나서 조치예정
+     */
     @Override
     public Page<User> pagingByMajorASC(Major major, String search, Pageable pageable) {
         return userQuerydslRepository.pagingAndSearchUserInMajorASC(major, search, pageable);
     }
-
     @Override
     public Optional<User> findByIdWithMajorDetailAndMajor(Long userId) {
         return userJpaRepository.findByIdWithMajorDetailAndMajor(userId);
@@ -36,11 +43,6 @@ public class UserQueryRepository implements UserQueryPort, AuthToUserQueryPort {
     @Override
     public Optional<User> findById(Long userId) {
         return userJpaRepository.findById(userId);
-    }
-
-    @Override
-    public Optional<User> findByStudentNumWithMajorDetailAndMajor(String studentNum) {
-        return userJpaRepository.findByStudentNumWithMajorDetailAndMajor(studentNum);
     }
 
     @Override

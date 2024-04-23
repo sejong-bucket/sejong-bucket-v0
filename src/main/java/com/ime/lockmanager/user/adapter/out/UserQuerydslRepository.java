@@ -20,6 +20,10 @@ import static com.ime.lockmanager.user.domain.QUser.user;
 public class UserQuerydslRepository{
     private final JPAQueryFactory jpaQueryFactory;
 
+    /**
+     * Todo
+     * 어드민 기능 추후 테스트코드 작성예정
+     */
     public Page<User> findApplicantsByMajorOrderByStudentNumAsc(Major major, Pageable pageable) {
         List<User> applicant = jpaQueryFactory.selectFrom(user)
                 .where(user.userTier.eq(UserTier.APPLICANT))
@@ -42,6 +46,7 @@ public class UserQuerydslRepository{
             builder.and(user.name.eq(search).or(user.studentNum.eq(search)));
         }
         List<User> userInfos = jpaQueryFactory.selectFrom(user)
+                .join(user.majorDetail.major)
                 .orderBy(user.studentNum.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -51,6 +56,7 @@ public class UserQuerydslRepository{
         int total = jpaQueryFactory
                 .selectFrom(user)
                 .where(user.majorDetail.major.eq(userMajor))
+                .where(builder)
                 .fetch().size();
         return new PageImpl<>(userInfos, pageable, total);
     }

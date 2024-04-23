@@ -16,8 +16,6 @@ public interface UserQueryPort {
     Page<User> pagingByMajorASC(Major major, String search, Pageable pageable);
     Optional<User> findByStudentNum(String studentNum);
 
-    Optional<User> findByStudentNumWithMajorDetailAndMajor(String studentNum);
-
     List<User> findAll();
 
     Optional<User> findById(Long userId);

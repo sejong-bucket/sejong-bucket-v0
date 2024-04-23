@@ -31,6 +31,10 @@ class UserCommandService implements UserCommandUseCase {
     private final ReservationCommandUseCase reservationCommandUseCase;
     private final int PAGE_SIZE = 30;
 
+    /**
+     * Todo
+     * 관리자 기능 추후 테스트
+     */
     @Override
     public UserTierResponseDto determineApplying(DetermineApplyingRequestDto requestDto, boolean isApprove) {
         User student = getMaybeUserByStudentNum(requestDto.getStudentNum())
@@ -45,6 +49,10 @@ class UserCommandService implements UserCommandUseCase {
                 .build();
     }
 
+    /**
+     * Todo
+     * 프론트 구현X 및 관리자 기능 추후 테스트
+     */
     @Override
     public void applyMembership(Long userId) {
         User student = userQueryPort.findById(userId)
