@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,5 +29,18 @@ public class Major extends BaseTimeEntity {
     public String changeName(String modifiedRepresentName) {
         this.name = modifiedRepresentName;
         return name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Major major = (Major) obj;
+        if (!this.id.equals(major.id)) {
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

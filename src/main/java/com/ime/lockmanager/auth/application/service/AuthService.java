@@ -92,6 +92,10 @@ class AuthService implements AuthUseCase {
                 ));
     }
 
+    /**
+     * Todo
+     * 로그인할때 업데이트니까 userTier업데이트는 없애도 되지 않을까?
+     */
     private void updateUserInfo(SejongMemberResponseDto sejongMemberResponseDto, MajorDetail majorDetail, User user) {
         UserState matchUserState = UserState.match(sejongMemberResponseDto.getResult().getBody().getStatus());
         user.updateUserInfo(UpdateUserInfoDto.builder()

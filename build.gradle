@@ -4,18 +4,70 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'jacoco'
 }
-jacoco {
-	toolVersion = '0.8.5'
-}
-
-tasks.withType(Test) {
-	jacoco.includeNoLocationClasses = true
-}
-group = 'com.ime'
-version = '0.0.1-SNAPSHOT'
 java {
 	sourceCompatibility = '11'
 }
+jacoco {
+	toolVersion = "0.8.7"
+}
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		csv.enabled true
+		html.enabled true
+
+		xml.destination file("${buildDir}/jacoco/index.xml")
+		csv.destination file("${buildDir}/jacoco/index.csv")
+		html.destination file("${buildDir}/jacoco/index.html")
+	}
+//	afterEvaluate {
+//		classDirectories.setFrom(
+//				files(classDirectories.files.collect {
+//					fileTree(dir: it, excludes: [
+//							'**/*Application*',
+//							'**/*Exception*',
+//							'**/dto/**',
+//							// ...
+//					])
+//				})
+//		)
+//	}
+	finalizedBy 'jacocoTestCoverageVerification'
+}
+jacocoTestCoverageVerification {
+	def QDomains = []
+	// qPattern = "*.QA","*.QB","*.QC", ... "*.QZ"
+	for (qPattern in '*.QA'..'*.QZ') {
+		QDomains.add(qPattern + '*')
+	}
+//	violationRules {
+//		rule {
+//			// rule 활성화
+//			enabled = true
+//			// 클래스 단위로 룰 체크
+//			element = 'CLASS'
+//
+//			excludes = [
+//					"**.*Application*",
+//					"**.*Config*",
+//					"**.*Dto*",
+//					"**.*Request*",
+//					"**.*Response*",
+//					"**.*Interceptor*",
+//					"**.*Exception*"
+//			] + QDomains
+//		}
+//	}
+}
+test {
+	useJUnitPlatform()
+	finalizedBy 'jacocoTestReport'
+}
+
+
+group = 'com.ime'
+version = '0.0.1-SNAPSHOT'
+
 
 configurations {
 	compileOnly {
@@ -30,7 +82,9 @@ repositories {
 dependencies {
 	//spring
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation ('org.springframework.boot:spring-boot-starter-test')
+
+
 
 	//lombok
 	compileOnly 'org.projectlombok:lombok'
@@ -112,6 +166,10 @@ tasks.withType(JavaCompile) {
 	options.getGeneratedSourceOutputDirectory().set(file(generated))
 }
 
+tasks.withType(Test) {
+	jacoco.includeNoLocationClasses = true
+}
+
 // java source set 에 querydsl QClass 위치 추가
 sourceSets {
 	main.java.srcDirs += [ generated ]
@@ -120,10 +178,6 @@ sourceSets {
 // gradle clean 시에 QClass 디렉토리 삭제
 clean {
 	delete file(generated)
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
 }
 jar {
 	enabled = false

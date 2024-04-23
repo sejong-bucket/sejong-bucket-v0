@@ -36,14 +36,22 @@ public class UserQueryService implements UserQueryUseCase {
     private final ReservationQueryPort reservationQueryPort;
     private final int PAGE_SIZE = 30;
 
+    /**
+     * Todo
+     * 관리자 기능 추후 테스트
+     */
     @Override
-    public PagingApplyStudentsResponseDto findApplyStudentsInMajorByPage(String studentNum, int page) {
-        User user = userQueryPort.findByStudentNumWithMajorDetailAndMajor(studentNum)
+    public PagingApplyStudentsResponseDto findApplyStudentsInMajorByPage(Long userId, int page) {
+        User user = userQueryPort.findByIdWithMajorDetailAndMajor(userId)
                 .orElseThrow(NotFoundUserException::new);
         Major major = user.getMajorDetail().getMajor();
         return getApplyStudentsResponsePageDto(page, major);
     }
 
+    /**
+     * Todo
+     * 관리자 기능 추후 테스트
+     */
     private PagingApplyStudentsResponseDto getApplyStudentsResponsePageDto(int page, Major major) {
         Page<User> membershipApplicants = userQueryPort
                 .findApplicantsByMajorOrderByStudentNumAsc(major, PageRequest.of(page, PAGE_SIZE));

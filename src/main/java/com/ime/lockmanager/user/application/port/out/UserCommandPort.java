@@ -9,5 +9,5 @@ public interface UserCommandPort {
 
     User save(User user);
 
-    void saveAll(List<User> users);
+    List<User> saveAll(List<User> users);
 }
