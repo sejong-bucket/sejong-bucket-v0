@@ -64,10 +64,6 @@ public class Locker extends BaseTimeEntity {
         this.period = period;
     }
 
-    public void modifiedImageInfo(String newImageUrl) {
-        this.imageUrl=newImageUrl;
-    }
-
 
     public static Locker createLocker(LockerCreateDto lockercreateDto) {
         return Locker.builder()

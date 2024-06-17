@@ -148,7 +148,7 @@ dependencies {
 	implementation 'commons-io:commons-io:2.4'
 
 	//s3
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+//	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 	//prometeus
 	implementation 'io.micrometer:micrometer-registry-prometheus'

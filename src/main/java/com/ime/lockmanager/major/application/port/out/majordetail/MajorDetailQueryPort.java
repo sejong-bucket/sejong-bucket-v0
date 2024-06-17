@@ -9,9 +9,4 @@ public interface MajorDetailQueryPort {
     Optional<MajorDetail> findByNameWithMajor(String majorName);
 
     List<MajorDetail> findAll();
-
-
-
-    List<MajorDetail> findAllByMajorId(Long majorId);
-
 }

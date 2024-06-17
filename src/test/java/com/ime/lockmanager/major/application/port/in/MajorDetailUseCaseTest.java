@@ -1,8 +1,6 @@
 package com.ime.lockmanager.major.application.port.in;
 
 import com.ime.lockmanager.common.format.exception.major.majordetail.DuplicatedMajorDetailException;
-import com.ime.lockmanager.major.application.port.in.req.CreateMajorDetailRequestDto;
-import com.ime.lockmanager.major.application.port.in.req.CreateMajorRequestDto;
 import com.ime.lockmanager.major.application.port.in.res.CreateMajorResponseDto;
 import com.ime.lockmanager.major.application.port.in.res.MajorDetailInMajorResponseDto;
 import com.ime.lockmanager.major.application.port.out.majordetail.MajorDetailQueryPort;

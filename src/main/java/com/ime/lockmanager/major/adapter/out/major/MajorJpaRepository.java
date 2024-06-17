@@ -7,6 +7,4 @@ import java.util.Optional;
 
 public interface MajorJpaRepository extends JpaRepository<Major,Long> {
     Optional<Major> findById(Long aLong);
-
-    Optional<Major> findByName(String name);
 }

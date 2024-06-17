@@ -1,11 +1,6 @@
 package com.ime.lockmanager.major.application.port.in;
 
 import com.ime.lockmanager.common.format.exception.major.majordetail.NotFoundMajorDetailException;
-import com.ime.lockmanager.major.application.port.in.req.CreateMajorRequestDto;
-import com.ime.lockmanager.major.application.port.in.req.ModifyMajorNameReqeustDto;
-import com.ime.lockmanager.major.application.port.in.res.AllMajorInfoResponseDto;
-import com.ime.lockmanager.major.application.port.in.res.CreateMajorResponseDto;
-import com.ime.lockmanager.major.application.port.in.res.ModifyMajorNameResponseDto;
 import com.ime.lockmanager.major.application.port.out.major.MajorCommandPort;
 import com.ime.lockmanager.major.application.port.out.majordetail.MajorDetailCommandPort;
 import com.ime.lockmanager.major.application.port.out.majordetail.MajorDetailQueryPort;

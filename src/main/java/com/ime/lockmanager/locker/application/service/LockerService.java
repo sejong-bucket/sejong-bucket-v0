@@ -3,7 +3,6 @@ package com.ime.lockmanager.locker.application.service;
 import com.ime.lockmanager.common.format.exception.locker.NotFoundLockerException;
 import com.ime.lockmanager.common.format.exception.major.majordetail.NotFoundMajorDetailException;
 import com.ime.lockmanager.common.format.exception.user.NotFoundUserException;
-import com.ime.lockmanager.file.application.service.ImageFileAdminService;
 import com.ime.lockmanager.locker.adapter.in.res.LockersInfoInMajorResponse;
 import com.ime.lockmanager.locker.adapter.in.res.dto.LockersInfoDto;
 import com.ime.lockmanager.locker.adapter.in.res.dto.LockersInfoInMajorDto;
@@ -50,7 +49,7 @@ class LockerService implements LockerUseCase {
     private final LockerDetailUseCase lockerDetailUseCase;
     private final MajorQueryPort majorQueryPort;
     private final UserQueryPort userQueryPort;
-    private final ImageFileAdminService imageFileAdminService;
+//    private final ImageFileAdminService imageFileAdminService;
     private final LockerCommandPort lockerCommandPort;
     private final LockerDetailQueryPort lockerDetailQueryPort;
 
@@ -81,7 +80,7 @@ class LockerService implements LockerUseCase {
     public void modifyLockerInfo(ModifyLockerInfoReqeustDto reqeustDto) throws IOException {
         Locker locker = lockerQueryPort.findByLockerId(reqeustDto.getLockerId()).orElseThrow(NotFoundLockerException::new);
 
-        changeImage(reqeustDto.getImage(), locker);
+//        changeImage(reqeustDto.getImage(), locker);
 
         changeReservationTime(reqeustDto.getStartTime(), reqeustDto.getEndTime(), locker);
 
@@ -120,7 +119,7 @@ class LockerService implements LockerUseCase {
 
 
     private void changeImage(MultipartFile newImage, Locker locker) throws IOException {
-        if (newImage == null || newImage.isEmpty()) {
+        /*if (newImage == null || newImage.isEmpty()) {
             return;
         }
         String originalImageUrl = locker.getImageUrl();
@@ -129,7 +128,7 @@ class LockerService implements LockerUseCase {
             imageFileAdminService.deleteImageToS3(originalImageUrl);
         }
         String newImageUrl = imageFileAdminService.saveImageToS3(newImage);
-        locker.modifiedImageInfo(newImageUrl);
+        locker.modifiedImageInfo(newImageUrl);*/
     }
 
 

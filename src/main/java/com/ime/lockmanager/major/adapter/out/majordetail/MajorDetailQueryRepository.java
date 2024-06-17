@@ -23,8 +23,4 @@ public class MajorDetailQueryRepository implements MajorDetailQueryPort {
         return majorDetailJpaRepository.findAll();
     }
 
-    @Override
-    public List<MajorDetail> findAllByMajorId(Long majorId) {
-        return majorDetailJpaRepository.findByMajorId(majorId);
-    }
 }

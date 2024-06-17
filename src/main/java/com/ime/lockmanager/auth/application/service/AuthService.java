@@ -18,7 +18,6 @@ import com.ime.lockmanager.common.jwt.JwtProvider;
 import com.ime.lockmanager.common.jwt.TokenSet;
 import com.ime.lockmanager.common.webclient.sejong.service.dto.res.SejongMemberResponseDto;
 import com.ime.lockmanager.common.webclient.sejong.service.SejongLoginService;
-import com.ime.lockmanager.major.application.port.in.MajorDetailUseCase;
 import com.ime.lockmanager.major.application.port.out.majordetail.MajorDetailQueryPort;
 import com.ime.lockmanager.major.domain.Major;
 import com.ime.lockmanager.major.domain.MajorDetail;

@@ -13,8 +13,4 @@ public class MajorDetailCommandRepository implements MajorDetailCommandPort {
     public void deleteAll() {
         majorDetailJpaRepository.deleteAll();
     }
-    @Override
-    public MajorDetail save(MajorDetail majorDetail) {
-        return majorDetailJpaRepository.save(majorDetail);
-    }
 }

@@ -2,7 +2,6 @@ package com.ime.lockmanager.locker.application.port.in.req;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ime.lockmanager.locker.adapter.in.req.LockerCreateRequest;
-import com.ime.lockmanager.locker.adapter.in.req.LockerDetailCreateRequest;
 import com.ime.lockmanager.locker.adapter.in.req.NumberIncreaseDirection;
 import com.ime.lockmanager.locker.domain.ImageInfo;
 import com.ime.lockmanager.locker.domain.locker.dto.LockerCreateDto;
