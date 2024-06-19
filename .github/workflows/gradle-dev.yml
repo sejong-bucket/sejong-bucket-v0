@@ -9,9 +9,9 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: ["dev"]
+    branches: [ "dev" ]
   pull_request:
-    branches: ["dev"]
+    branches: [ "dev" ]
 
 permissions:
   contents: read
@@ -56,7 +56,7 @@ jobs:
         run: |
           docker build -f Dockerfile.dev -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.PROJECT_NAME }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.PROJECT_NAME }}
-          
+      
 
       ## deploy to production
       - name: Deploy to dev
@@ -67,11 +67,10 @@ jobs:
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           envs: GITHUB_SHA
           script: |
-            sudo docker rm -f redis
             sudo docker rm -f ime-dev
             sudo docker pull redis
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.PROJECT_NAME }}
-            docker run -d -p 8080:8080 --network lockermanager-network --name ime-dev jaepyo99/lockermanager
+            docker run -d -p 8080:8080 --name ime-dev jaepyo99/lockermanager
             docker image prune -f
 
   current-time:
