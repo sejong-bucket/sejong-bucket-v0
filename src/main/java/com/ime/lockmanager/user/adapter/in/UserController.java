@@ -20,8 +20,6 @@ import java.security.Principal;
 @RestController
 @RequestMapping("${api.user.prefix}/users")
 class UserController {
-
-    private final UserCommandUseCase userCommandUseCase;
     private final UserQueryUseCase userQueryUseCase;
 
     @ApiOperation(
@@ -37,13 +35,5 @@ class UserController {
         return new SuccessResponse(UserInfoResponse.fromResponseDto(
                 userInfo
         ));
-    }
-
-
-    @ApiOperation(value = "학생회비 납부 신청")
-    @PostMapping("/{userId}/membership")
-    public SuccessResponse applyMembership(@PathVariable Long userId) {
-        userCommandUseCase.applyMembership(userId);
-        return SuccessResponse.ok();
     }
 }

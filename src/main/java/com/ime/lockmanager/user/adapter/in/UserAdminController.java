@@ -69,32 +69,4 @@ class UserAdminController {
         userCommandUseCase.modifiedUserInfo(modifiedUserInfoRequest.toRequestDto());
         return SuccessResponse.ok();
     }
-
-    @ApiImplicitParam(
-            name = "page"
-            , value = "원하는 페이지번호"
-            , required = true
-            , dataType = "int"
-            , defaultValue = "0")
-    @ApiOperation(value = "학생회비 납부 신청자 조회")
-    @GetMapping("/users/{userId}tier/apply")
-    public SuccessResponse<AllApplyingStudentPageResponse> findAllApplyingStudent(@PathVariable Long userId,@RequestParam(name = "page",
-            defaultValue = "0") int page) {
-        AllApplyingStudentPageResponse response = userQueryUseCase.findApplyStudentsInMajorByPage(userId, page)
-                .toResponse();
-        return new SuccessResponse(response);
-    }
-
-    @ApiOperation(value = "학생회비 납부 신청자 승인 및 거절 API")
-    @ApiImplicitParam(
-            name = "isApprove"
-            , value = "학생회비 납부 승인 또는 거절하기 위한 boolean값"
-            , required = true
-            , dataType = "boolean")
-    @PostMapping("/users/tier/apply")
-    public SuccessResponse<UserTierResponse> determineApplying(@Valid @RequestBody DetermineApplyingRequest request,
-                                                               @RequestParam(name = "isApprove") boolean isApprove) {
-        UserTierResponse response = userCommandUseCase.determineApplying(request.toRequestDto(), isApprove).toResponse();
-        return new SuccessResponse(response);
-    }
 }

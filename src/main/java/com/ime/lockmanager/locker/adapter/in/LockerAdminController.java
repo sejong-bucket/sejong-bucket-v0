@@ -46,7 +46,7 @@ class LockerAdminController {
         log.info("{} : 새로운 사물함 생성", authentication.getName());
         String createdLockerName = lockerUseCase.createLocker(
                         LockerCreateRequestDto
-                                .fromRequest(lockerCreateRequest/*, image*/), majorId
+                                .fromRequest(lockerCreateRequest), majorId
                 )
                 .getCreatedLockerName();
         return new SuccessResponse(

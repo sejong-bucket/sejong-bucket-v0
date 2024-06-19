@@ -11,8 +11,6 @@ import java.util.Optional;
 
 @Component
 public interface UserQueryPort {
-    Page<User> findApplicantsByMajorOrderByStudentNumAsc(Major major, Pageable pageable);
-
     Page<User> pagingByMajorASC(Major major, String search, Pageable pageable);
     Optional<User> findByStudentNum(String studentNum);
 

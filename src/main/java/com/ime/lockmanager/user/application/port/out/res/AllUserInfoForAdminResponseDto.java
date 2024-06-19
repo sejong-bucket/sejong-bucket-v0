@@ -1,13 +1,11 @@
 package com.ime.lockmanager.user.application.port.out.res;
 
-import com.ime.lockmanager.locker.domain.lockerdetail.LockerDetail;
 import com.ime.lockmanager.reservation.domain.Reservation;
 import com.ime.lockmanager.user.adapter.in.res.ReservationInfo;
 import com.ime.lockmanager.user.adapter.in.res.UserInfo;
 import com.ime.lockmanager.user.adapter.in.res.UserInfoAdminResponse;
 import com.ime.lockmanager.user.domain.Role;
 import com.ime.lockmanager.user.domain.User;
-import com.ime.lockmanager.user.domain.UserTier;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,15 +13,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.Optional;
 
-import static com.ime.lockmanager.reservation.domain.ReservationStatus.RESERVED;
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class AllUserInfoForAdminResponseDto {
     private String name;
-    private UserTier userTier;
     private String status;
     private String studentNum;
     private Role role;
@@ -33,14 +28,12 @@ public class AllUserInfoForAdminResponseDto {
     private String lockerNum;
 
     public AllUserInfoForAdminResponseDto(String name,
-                                          UserTier userTier,
                                           String status,
                                           String studentNum,
                                           Role role,
                                           String lockerName,
                                           String lockerNum) {
         this.name = name;
-        this.userTier = userTier;
         this.status = status;
         this.studentNum = studentNum;
         this.role = role;
@@ -52,7 +45,6 @@ public class AllUserInfoForAdminResponseDto {
         return UserInfoAdminResponse.builder()
                 .userInfo(UserInfo.builder()
                         .userId(userId)
-                        .userTier(userTier)
                         .studentNum(studentNum)
                         .studentName(name)
                         .role(role)
@@ -72,7 +64,6 @@ public class AllUserInfoForAdminResponseDto {
                 .userId(user.getId())
                 .studentNum(user.getStudentNum())
                 .role(user.getRole())
-                .userTier(user.getUserTier())
                 .name(user.getName())
                 .lockerName(lockerName)
                 .lockerNum(lockerNum)

@@ -10,7 +10,6 @@ import javax.persistence.*;
 
 import static com.ime.lockmanager.user.domain.Role.ROLE_ADMIN;
 import static com.ime.lockmanager.user.domain.Role.ROLE_USER;
-import static com.ime.lockmanager.user.domain.UserTier.NON_MEMBER;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 
@@ -34,8 +33,6 @@ public class User extends BaseTimeEntity {
     private UserState userState;
 
     @Enumerated(STRING)
-    private UserTier userTier;
-    @Enumerated(STRING)
     @Column(nullable = false)
     private Role role;
     private String grade;
@@ -52,27 +49,10 @@ public class User extends BaseTimeEntity {
         }
     }
 
-
     public void updateUserInfo(UpdateUserInfoDto updateUserInfoDto) {
-        this.userTier = updateUserInfoDto.getUserTier();
         this.auth = updateUserInfoDto.isAuth();
         this.userState = updateUserInfoDto.getStatus();
         this.grade = updateUserInfoDto.getGrade();
         this.majorDetail = updateUserInfoDto.getMajorDetail();
-    }
-
-    public UserTier applyMembership() {
-        userTier = UserTier.APPLICANT;
-        return userTier;
-    }
-
-    public UserTier approve() {
-        userTier = UserTier.MEMBER;
-        return userTier;
-    }
-
-    public UserTier deny() {
-        userTier = NON_MEMBER;
-        return userTier;
     }
 }

@@ -1,15 +1,12 @@
 package com.ime.lockmanager.locker.adapter.in.res.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ime.lockmanager.user.domain.UserState;
-import com.ime.lockmanager.user.domain.UserTier;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Builder

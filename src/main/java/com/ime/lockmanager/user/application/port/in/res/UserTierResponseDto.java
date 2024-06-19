@@ -1,7 +1,6 @@
 package com.ime.lockmanager.user.application.port.in.res;
 
 import com.ime.lockmanager.user.adapter.in.res.UserTierResponse;
-import com.ime.lockmanager.user.domain.UserTier;
 import lombok.Builder;
 import lombok.Getter;
 

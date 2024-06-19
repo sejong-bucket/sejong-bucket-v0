@@ -1,7 +1,6 @@
 package com.ime.lockmanager.locker.application.port.in.req;
 
 import com.ime.lockmanager.user.domain.UserState;
-import com.ime.lockmanager.user.domain.UserTier;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +16,5 @@ public class ModifyLockerInfoReqeustDto {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private List<UserState> userStates;
-    private List<UserTier> userTiers;
     private MultipartFile image;
 }

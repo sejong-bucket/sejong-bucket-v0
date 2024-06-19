@@ -1,16 +1,12 @@
 package com.ime.lockmanager.locker.application.port.in.dto;
 
-import com.ime.lockmanager.locker.adapter.in.res.dto.LockersInfoDto;
-import com.ime.lockmanager.locker.adapter.in.res.dto.LockersInfoInMajorDto;
 import com.ime.lockmanager.user.domain.UserState;
-import com.ime.lockmanager.user.domain.UserTier;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Builder
 @Getter
@@ -18,8 +14,6 @@ import java.util.Set;
 public class CreatedLockerInfo {
     @Schema(description = "사물함Id")
     private Long id;
-    @Schema(description = "사물함을 예약할수 있는 학생회비 납부조건")
-    private List<UserTier> permitTiers;
     @Schema(description = "사물함을 예약할수 있는 학생의 재학조건")
     private List<UserState> permitStates;
     @Schema(description = "사물함 이름")

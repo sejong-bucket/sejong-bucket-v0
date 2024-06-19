@@ -1,7 +1,6 @@
 package com.ime.lockmanager.user.adapter.in.res;
 
 import com.ime.lockmanager.user.domain.Role;
-import com.ime.lockmanager.user.domain.UserTier;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,8 +13,6 @@ public class UserInfo {
     private String studentName;
     @Schema(description = "학생의 학번")
     private String studentNum;
-    @Schema(description = "학생회비 납부여부")
-    private UserTier userTier;
     @Schema(description = "학생의 pk값")
     private Long userId;
     @Schema(description = "관리자 여부")

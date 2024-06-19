@@ -9,10 +9,4 @@ import java.util.List;
 
 public interface UserCommandUseCase {
     void modifiedUserInfo(ModifiedUserInfoRequestDto requestDto) throws Exception;
-
-    void updateUserDueInfoOrSave(List<UpdateUserDueInfoDto> updateUserDueInfoDto) throws Exception;
-
-    void applyMembership(Long userId);
-
-    UserTierResponseDto determineApplying(DetermineApplyingRequestDto toRequestDto, boolean isApprove);
 }

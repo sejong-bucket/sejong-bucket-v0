@@ -8,7 +8,6 @@ import com.ime.lockmanager.auth.application.port.out.AuthToRedisQueryPort;
 import com.ime.lockmanager.auth.application.port.out.AuthToUserCommandPort;
 import com.ime.lockmanager.auth.application.port.out.AuthToUserQueryPort;
 import com.ime.lockmanager.auth.application.service.dto.LoginInfoDto;
-import com.ime.lockmanager.auth.domain.AuthUser;
 import com.ime.lockmanager.common.aop.meta.DistributeLock;
 import com.ime.lockmanager.common.format.exception.auth.jwt.InvalidRefreshTokenException;
 import com.ime.lockmanager.common.format.exception.major.majordetail.NotFoundMajorDetailException;
@@ -23,10 +22,8 @@ import com.ime.lockmanager.major.domain.Major;
 import com.ime.lockmanager.major.domain.MajorDetail;
 import com.ime.lockmanager.user.domain.User;
 import com.ime.lockmanager.user.domain.UserState;
-import com.ime.lockmanager.user.domain.UserTier;
 import com.ime.lockmanager.user.domain.dto.UpdateUserInfoDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +32,6 @@ import java.time.Duration;
 import java.util.Objects;
 
 import static com.ime.lockmanager.user.domain.Role.ROLE_USER;
-import static com.ime.lockmanager.user.domain.UserTier.MEMBER;
 
 @Transactional
 @RequiredArgsConstructor
@@ -98,7 +94,6 @@ class AuthService implements AuthUseCase {
     private void updateUserInfo(SejongMemberResponseDto sejongMemberResponseDto, MajorDetail majorDetail, User user) {
         UserState matchUserState = UserState.match(sejongMemberResponseDto.getResult().getBody().getStatus());
         user.updateUserInfo(UpdateUserInfoDto.builder()
-                .userTier(MEMBER)
                 .auth(true)
                 .status(matchUserState)
                 .grade(sejongMemberResponseDto.getResult().getBody().getGrade())
@@ -114,7 +109,6 @@ class AuthService implements AuthUseCase {
         UserState matchUserState = UserState.match(loginInfoDto.getStatus());
 
         return User.builder()
-                .userTier(MEMBER)
                 .name(loginInfoDto.getName())
                 .userState(matchUserState)
                 .studentNum(loginInfoDto.getStudentNum())

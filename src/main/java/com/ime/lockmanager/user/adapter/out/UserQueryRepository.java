@@ -18,14 +18,7 @@ public class UserQueryRepository implements UserQueryPort, AuthToUserQueryPort {
     private final UserJpaRepository userJpaRepository;
     private final UserQuerydslRepository userQuerydslRepository;
 
-    /**
-     * Todo
-     * 어드민 기능 추후 테스트코드 작성예정
-     */
-    @Override
-    public Page<User> findApplicantsByMajorOrderByStudentNumAsc(Major major, Pageable pageable) {
-        return userQuerydslRepository.findApplicantsByMajorOrderByStudentNumAsc(major, pageable);
-    }
+
 
     /**
      * Todo

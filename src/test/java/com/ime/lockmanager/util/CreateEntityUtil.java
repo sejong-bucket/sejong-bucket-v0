@@ -5,7 +5,6 @@ import com.ime.lockmanager.major.domain.MajorDetail;
 import com.ime.lockmanager.user.domain.Role;
 import com.ime.lockmanager.user.domain.User;
 import com.ime.lockmanager.user.domain.UserState;
-import com.ime.lockmanager.user.domain.UserTier;
 
 public class CreateEntityUtil {
     public static MajorDetail createMajorDetail(String name, Major major) {

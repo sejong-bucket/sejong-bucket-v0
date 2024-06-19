@@ -60,7 +60,6 @@ class UserTest {
         //given
         User member = CreateEntityUtil.createUser(UserState.ATTEND, UserTier.NON_MEMBER, Role.ROLE_USER, "3", "19011721", "test", CreateEntityUtil.createMajorDetail("testMajorDetail", CreateEntityUtil.createMajor("testMajor")));
         //when
-        member.applyMembership();
         //then
         org.junit.jupiter.api.Assertions.assertTrue(member.getUserTier().equals(UserTier.APPLICANT));
 //        Assertions.assertThat(member.getUserTier()).isEqualTo(UserTier.APPLICANT);

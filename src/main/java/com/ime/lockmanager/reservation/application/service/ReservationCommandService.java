@@ -130,9 +130,6 @@ public class ReservationCommandService implements ReservationCommandUseCase {
         if (!locker.getPermitUserState().contains(user.getUserState())) {
             throw new InvalidReservedStatusException();
         }
-        if (!locker.getPermitUserTier().contains(user.getUserTier())) {
-            throw new NotMatchUserTierAndLockerException();
-        }
         if (isReservationNegativeByLockerDetailId(lockerDetail.getId())) {
             throw new AlreadyReservedLockerException();
         }

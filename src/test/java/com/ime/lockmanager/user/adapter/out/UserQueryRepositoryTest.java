@@ -8,12 +8,9 @@ import com.ime.lockmanager.major.domain.MajorDetail;
 import com.ime.lockmanager.user.domain.Role;
 import com.ime.lockmanager.user.domain.User;
 import com.ime.lockmanager.user.domain.UserState;
-import com.ime.lockmanager.user.domain.UserTier;
 import com.ime.lockmanager.util.CreateEntityUtil;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.assertj.core.api.AssertJProxySetup;
 import org.assertj.core.api.Assertions;
-import org.hibernate.jpa.internal.PersistenceUnitUtilImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,14 +20,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @ActiveProfiles("test")
 @DataJpaTest

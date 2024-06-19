@@ -27,7 +27,6 @@ import com.ime.lockmanager.major.domain.Major;
 import com.ime.lockmanager.user.application.port.out.UserQueryPort;
 import com.ime.lockmanager.user.domain.User;
 import com.ime.lockmanager.user.domain.UserState;
-import com.ime.lockmanager.user.domain.UserTier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,7 +48,7 @@ class LockerService implements LockerUseCase {
     private final LockerDetailUseCase lockerDetailUseCase;
     private final MajorQueryPort majorQueryPort;
     private final UserQueryPort userQueryPort;
-//    private final ImageFileAdminService imageFileAdminService;
+    //    private final ImageFileAdminService imageFileAdminService;
     private final LockerCommandPort lockerCommandPort;
     private final LockerDetailQueryPort lockerDetailQueryPort;
 
@@ -67,7 +66,6 @@ class LockerService implements LockerUseCase {
                         .permitStates(locker.getPermitUserState())
                         .image(locker.getImageUrl())
                         .name(locker.getName())
-                        .permitTiers(locker.getPermitUserTier())
                         .build())
                 .collect(Collectors.toList());
         return LeftLockerResponseDto.builder()
@@ -86,17 +84,7 @@ class LockerService implements LockerUseCase {
 
         changeUserStatesCondition(reqeustDto.getUserStates(), locker);
 
-        changeUserTierCondition(reqeustDto.getUserTiers(), locker);
-
         changeLockerName(reqeustDto.getLockerName(), locker);
-    }
-
-    private void changeUserTierCondition(List<UserTier> newUserTiers, Locker locker) {
-        if (newUserTiers == null || newUserTiers.isEmpty()) {
-            return;
-        }
-        locker.getPermitUserTier().clear();
-        newUserTiers.stream().forEach(userTier -> locker.getPermitUserTier().add(userTier));
     }
 
     private void changeUserStatesCondition(List<UserState> newUserStates, Locker locker) {
@@ -115,20 +103,6 @@ class LockerService implements LockerUseCase {
                 .startDateTime(newStartTime)
                 .endDateTime(newEndTime)
                 .build());
-    }
-
-
-    private void changeImage(MultipartFile newImage, Locker locker) throws IOException {
-        /*if (newImage == null || newImage.isEmpty()) {
-            return;
-        }
-        String originalImageUrl = locker.getImageUrl();
-        if (!originalImageUrl.isBlank()) {
-            //기존 이미지 삭제
-            imageFileAdminService.deleteImageToS3(originalImageUrl);
-        }
-        String newImageUrl = imageFileAdminService.saveImageToS3(newImage);
-        locker.modifiedImageInfo(newImageUrl);*/
     }
 
 
@@ -188,7 +162,6 @@ class LockerService implements LockerUseCase {
                 .name(locker.getName())
                 .totalColumn(locker.getTotalColumn())
                 .totalRow(locker.getTotalRow())
-                .permitTiers(locker.getPermitUserTier().stream().map(tier -> tier.getName()).collect(Collectors.toList()))
                 .permitStates(locker.getPermitUserState().stream().map(userState -> userState.getName()).collect(Collectors.toList()))
                 .image(locker.getImageUrl())
                 .build();
@@ -196,20 +169,10 @@ class LockerService implements LockerUseCase {
 
     @Override
     public LockerCreateResponseDto createLocker(LockerCreateRequestDto requestDto, Long majorId) throws IOException {
-        // 이미지 삽입코드 주석처리
-        /*String imageUrl = null;
-        if (!requestDto.getImage().isEmpty()) { //이미지가 있을때
-            imageUrl = imageFileAdminService.saveImageToS3(requestDto.getImage());
-        }*/
-
         Major userMajor = majorQueryPort.findById(majorId)
                 .orElseThrow(NotFoundMajorDetailException::new);//에러 새로 만들어야함
 
-        Locker createdLocker = Locker.createLocker(
-                requestDto.toLockerCreateDto(
-                        userMajor/*, imageUrl*/
-                )
-        );
+        Locker createdLocker = Locker.createLocker(requestDto.toLockerCreateDto(userMajor));
 
         Locker saveLocker = lockerCommandPort.save(createdLocker);
 

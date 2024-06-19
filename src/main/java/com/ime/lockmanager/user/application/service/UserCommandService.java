@@ -11,7 +11,6 @@ import com.ime.lockmanager.user.application.port.out.UserCommandPort;
 import com.ime.lockmanager.user.application.port.out.UserQueryPort;
 import com.ime.lockmanager.user.domain.Role;
 import com.ime.lockmanager.user.domain.User;
-import com.ime.lockmanager.user.domain.UserTier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,45 +26,8 @@ import java.util.stream.Collectors;
 @Service
 class UserCommandService implements UserCommandUseCase {
     private final UserQueryPort userQueryPort;
-    private final UserCommandPort userCommandPort;
     private final ReservationCommandUseCase reservationCommandUseCase;
     private final int PAGE_SIZE = 30;
-
-    /**
-     * Todo
-     * 관리자 기능 추후 테스트
-     */
-    @Override
-    public UserTierResponseDto determineApplying(DetermineApplyingRequestDto requestDto, boolean isApprove) {
-        User student = getMaybeUserByStudentNum(requestDto.getStudentNum())
-                .orElseThrow(NotFoundUserException::new);
-        if (isApprove) {
-            student.approve();
-        } else {
-            student.deny();
-        }
-        return UserTierResponseDto.builder()
-                .isApprove(isApprove)
-                .build();
-    }
-
-    /**
-     * Todo
-     * 프론트 구현X 및 관리자 기능 추후 테스트
-     */
-    @Override
-    public void applyMembership(Long userId) {
-        User student = userQueryPort.findById(userId)
-                .orElseThrow(NotFoundUserException::new);
-        verifyAlreadyMember(student);
-        student.applyMembership();
-    }
-
-    private void verifyAlreadyMember(User student) {
-        if (!student.getUserTier().equals(UserTier.NON_MEMBER)) {
-            throw new IllegalStateException("이미 신청 또느 승인된 학우입니다.");
-        }
-    }
 
     /**
      * Todo
@@ -90,29 +52,7 @@ class UserCommandService implements UserCommandUseCase {
             if (modifiedUserInfo.getAdmin() != null) {
                 user.changeAdmin(modifiedUserInfo.getAdmin().booleanValue());
             }
-            if (modifiedUserInfo.getMembership() != null) {
-                if (modifiedUserInfo.getMembership().booleanValue() == Boolean.TRUE) {//납부자로 변경하고싶을때
-                    user.approve();
-                } else {
-                    user.deny();
-                }
-            }
         }
-    }
-
-    @Override
-    public void updateUserDueInfoOrSave(List<UpdateUserDueInfoDto> updateUserDueInfoDto) throws Exception {
-        List<User> newUsers = updateUserDueInfoDto.parallelStream()
-                .filter(dto -> getMaybeUserByStudentNum(dto.getStudentNum()).isEmpty())
-                .map(dto -> User.builder()
-                        .name(dto.getName())
-                        .studentNum(dto.getStudentNum())
-                        .userTier(UserTier.judge(dto.isDue()))
-                        .role(Role.ROLE_USER)
-                        .majorDetail(dto.getMajorDetail())
-                        .auth(false)
-                        .build()).collect(Collectors.toList());
-        userCommandPort.saveAll(newUsers);
     }
 
     private Optional<User> getMaybeUserByStudentNum(String studentNum) {

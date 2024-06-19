@@ -1,7 +1,6 @@
 package com.ime.lockmanager.locker.adapter.in.req;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ime.lockmanager.user.domain.UserTier;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -30,16 +29,6 @@ public class LockerCreateRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "사물함 예약 마감 시간을 설정해주세요.")
     private LocalDateTime endReservationTime;
-    /*@Schema(description = "생성할 사물함 재학 여부에 따른 허용조건")
-    @NotNull(message = "사용자 재학상태에 따른 사물함 이용제약을 설정해주세요.")
-    private List<UserState> userStates;*/
-    @Schema(description = "생성할 사물함 학생회비 납부 여부에 따른 허용조건")
-    @NotNull(message = "학생회비 납부에 따른 사물함 이용제약을 설정해주세요.")
-    private List<UserTier> userTiers;
-
-    /*@Schema(description = "생성할 사물함의 각 칸 정보")
-    private List<LockerDetailCreateRequest> lockerDetailCreateRequests;*/
-
     @Schema(description = "사물함 번호 증가방향")
     @NotNull(message = "사물함 번호의 증가방향을 설정해주세요")
     private NumberIncreaseDirection numberIncreaseDirection;

@@ -36,37 +36,6 @@ public class UserQueryService implements UserQueryUseCase {
     private final ReservationQueryPort reservationQueryPort;
     private final int PAGE_SIZE = 30;
 
-    /**
-     * Todo
-     * 관리자 기능 추후 테스트
-     */
-    @Override
-    public PagingApplyStudentsResponseDto findApplyStudentsInMajorByPage(Long userId, int page) {
-        User user = userQueryPort.findByIdWithMajorDetailAndMajor(userId)
-                .orElseThrow(NotFoundUserException::new);
-        Major major = user.getMajorDetail().getMajor();
-        return getApplyStudentsResponsePageDto(page, major);
-    }
-
-    /**
-     * Todo
-     * 관리자 기능 추후 테스트
-     */
-    private PagingApplyStudentsResponseDto getApplyStudentsResponsePageDto(int page, Major major) {
-        Page<User> membershipApplicants = userQueryPort
-                .findApplicantsByMajorOrderByStudentNumAsc(major, PageRequest.of(page, PAGE_SIZE));
-        List<ApplyingStudentsDto> applicantInfos = membershipApplicants.stream()
-                .map(applicant ->
-                        ApplyingStudentsDto.builder()
-                                .studentName(applicant.getName())
-                                .studentNum(applicant.getStudentNum())
-                                .build()
-                ).collect(Collectors.toList());
-        return PagingApplyStudentsResponseDto.builder()
-                .currentPage(membershipApplicants.getNumber())
-                .totalPage(membershipApplicants.getTotalPages())
-                .applicant(applicantInfos).build();
-    }
     @Override
     public UserInfoQueryResponseDto findUserInfoByStudentNum(UserInfoRequestDto userRequestDto) {
         User user = userQueryPort.findByIdWithMajorDetailAndMajor(userRequestDto.getUserId())
@@ -90,7 +59,6 @@ public class UserQueryService implements UserQueryUseCase {
         UserInfoQueryResponseDto.UserInfoQueryResponseDtoBuilder userInfoBuilder = UserInfoQueryResponseDto.builder()
                 .name(user.getName())
                 .studentNum(user.getStudentNum())
-                .userTier(user.getUserTier())
                 .userState(user.getUserState())
                 .majorDetail(user.getMajorDetail().getName());
 

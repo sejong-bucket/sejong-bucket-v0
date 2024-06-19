@@ -1,23 +1,17 @@
 package com.ime.lockmanager.locker.domain.locker;
 
 import com.ime.lockmanager.common.domain.BaseTimeEntity;
-import com.ime.lockmanager.locker.application.port.in.req.LockerSetTimeRequestDto;
-import com.ime.lockmanager.locker.domain.ImageInfo;
 import com.ime.lockmanager.locker.domain.Period;
 import com.ime.lockmanager.locker.domain.locker.dto.LockerCreateDto;
 import com.ime.lockmanager.major.domain.Major;
-import com.ime.lockmanager.reservation.domain.Reservation;
 import com.ime.lockmanager.user.domain.UserState;
-import com.ime.lockmanager.user.domain.UserTier;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.persistence.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static java.time.LocalDateTime.now;
 import static javax.persistence.FetchType.LAZY;
@@ -54,12 +48,6 @@ public class Locker extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private List<UserState> permitUserState = new ArrayList<>();
 
-    @ElementCollection(targetClass = UserTier.class)
-    @JoinTable(name = "PERMIT_USER_Tier_TABLE", joinColumns = @JoinColumn(name = "locker_id"))
-    @Column(name = "permitUserTier")
-    @Enumerated(EnumType.STRING)
-    private List<UserTier> permitUserTier = new ArrayList<>();
-
     public void modifiedDateTime(Period period) {
         this.period = period;
     }
@@ -73,7 +61,6 @@ public class Locker extends BaseTimeEntity {
                 .totalColumn(lockercreateDto.getTotalColumn())
                 .totalRow(lockercreateDto.getTotalRow())
                 .imageUrl(lockercreateDto.getImageUrl())
-                .permitUserTier(lockercreateDto.getUserTiers())
                 .permitUserState(lockercreateDto.getUserStates())
                 .build();
     }
