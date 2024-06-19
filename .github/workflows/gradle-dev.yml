@@ -71,8 +71,7 @@ jobs:
             sudo docker rm -f ime-dev
             sudo docker pull redis
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.PROJECT_NAME }}
-            docker run -d -p 6379:6379 --network lockermanager-network --name redis redis
-            docker run -d -p 8083:8083 --network lockermanager-network --name ime-dev jaepyo99/lockermanager
+            docker run -d -p 8080:8080 --network lockermanager-network --name ime-dev jaepyo99/lockermanager
             docker image prune -f
 
   current-time:
