@@ -30,16 +30,16 @@ public class ReservationController {
             notes = "현재 사용자의 예약된 사물함을 취소하는 API"
     )
     @PatchMapping("/lockerDetail/{lockerDetailId}/reservations")
-    public SuccessResponse<CancelLockerDetailResponse> cancelLocker(@ApiIgnore Principal principal,
+    public SuccessResponse<CancelLockerDetailResponse> cancelLocker(/*@ApiIgnore Principal principal,*/
                                                                     @PathVariable Long lockerDetailId,
                                                                     @Valid @RequestBody LockerDetailCancelRequest request) {
-        log.info("{} : 사물함 취소", principal.getName());
+//        log.info("{} : 사물함 취소", principal.getName());
         Long cancelLockerByStudentId = reservationCommandUseCase.cancelLockerByStudentNum(
                 UserCancelLockerRequestDto.of(request.getUserId(), lockerDetailId)
         );
         return new SuccessResponse(CancelLockerDetailResponse.builder()
                 .canceledLockerDetailNum(cancelLockerByStudentId)
-                .studentNum(principal.getName()).build());
+                /*.studentNum(principal.getName())*/.build());
     }
 
     //사물함 예약하는 api
