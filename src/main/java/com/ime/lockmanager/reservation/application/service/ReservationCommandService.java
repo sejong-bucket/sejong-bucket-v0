@@ -1,6 +1,7 @@
 package com.ime.lockmanager.reservation.application.service;
 
 import com.ime.lockmanager.common.aop.meta.DistributeLock;
+import com.ime.lockmanager.common.aop.meta.ReserveLock;
 import com.ime.lockmanager.common.format.exception.locker.*;
 import com.ime.lockmanager.common.format.exception.reservation.NotFoundReservationException;
 import com.ime.lockmanager.common.format.exception.user.AlreadyReservedUserException;
@@ -18,6 +19,7 @@ import com.ime.lockmanager.user.application.port.out.UserQueryPort;
 import com.ime.lockmanager.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,7 @@ import java.util.*;
 public class ReservationCommandService implements ReservationCommandUseCase {
     private final UserQueryPort userQueryPort;
     private final LockerDetailQueryPort lockerDetailQueryPort;
+    private final RedisTemplate<String, String> redisTemplate;
 
     private static final String LOCKER_KEY = "LOCKER_";
 
@@ -48,7 +51,7 @@ public class ReservationCommandService implements ReservationCommandUseCase {
     }
 
     @Override
-    @DistributeLock(identifier = LOCKER_KEY, key = "#dto.lockerDetailId")
+    @ReserveLock(identifier = LOCKER_KEY, key = "#dto.lockerDetailId")
     public LockerRegisterResponseDto reserveForUser(LockerRegisterRequestDto dto) throws Exception {
         User user = getUserById(dto.getUserId());
         LockerDetail lockerDetail = getLockerDetailById(dto.getLockerDetailId());
@@ -126,6 +129,7 @@ public class ReservationCommandService implements ReservationCommandUseCase {
         LockerDetail lockerDetail = lockerDetailQueryPort.findById(cancelLockerDto.getLockerDetailId())
                 .orElseThrow(() -> new RuntimeException("예약 안된 사물함입니다."));
         Long cancelLockerDetailId = lockerDetail.cancel();
+        redisTemplate.delete(LOCKER_KEY + cancelLockerDetailId);
         log.info("{} : 사물함 취소끝", cancelLockerDto.getUserId());
         return cancelLockerDetailId;
     }

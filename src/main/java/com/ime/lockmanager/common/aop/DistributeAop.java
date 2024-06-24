@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -22,6 +23,8 @@ public class DistributeAop {
     private static final String REDISSON_KEY_PREFIX = "RLOCK_";
     private final RedissonClient redissonClient;
     private final AopForTransaction aopForTransaction;
+    private final RedisTemplate<String, Object> redisTemplate;
+
 
     @Around("@annotation(com.ime.lockmanager.common.aop.meta.DistributeLock)")
     public Object lock(final ProceedingJoinPoint joinPoint)throws Throwable{
