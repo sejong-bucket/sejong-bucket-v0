@@ -46,7 +46,7 @@ public class WebSecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/api/v2/auth/login","/api/v2/auth/reissue","/swagger-ui/**","/actuator/**").permitAll()
+                .antMatchers("/api/v2/auth/login", "/api/v2/auth/reissue", "/swagger-ui/**", "/actuator/**").permitAll()
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .antMatchers("/master/**").hasRole("MASTER")
                 .anyRequest()
@@ -58,10 +58,10 @@ public class WebSecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .cors()
-                .configurationSource(corsConfiguration())
-                .and()
+                .configurationSource(corsConfiguration());
+                /*.and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtExceptionFilter,JwtAuthenticationFilter.class);
+                .addFilterBefore(jwtExceptionFilter,JwtAuthenticationFilter.class);*/
         return http.build();
     }
     public CorsConfigurationSource corsConfiguration(){
