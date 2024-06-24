@@ -26,12 +26,11 @@ class LockerController {
             value = "사물함 정보조회",
             notes = "사물함 이름, 기간, 각 사물함 칸의 예약여부정보"
     )
-    @GetMapping("/users/{userId}/majors/lockers")
-    public SuccessResponse<LockersInfoInMajorResponse> findAllLockerInMajor(@ApiIgnore Authentication authentication,
-                                                                            @PathVariable Long userId) {
+    @GetMapping("/majors/{majorId}/lockers")
+    public SuccessResponse<LockersInfoInMajorResponse> findAllLockerInMajor(@PathVariable Long majorId) {
         long startTime = System.currentTimeMillis();
         SuccessResponse successResponse = new SuccessResponse(lockerUseCase.findAllLockerInMajor(FindAllLockerInMajorRequestDto.builder()
-                .userId(userId).build()));
+                .majorId(majorId).build()));
         long stopTime = System.currentTimeMillis();
         System.out.println("코드 실행 시간: " + (stopTime - startTime));
         return successResponse;

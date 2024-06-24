@@ -15,5 +15,4 @@ public interface LockerUseCase {
 
     LockersInfoInMajorResponse findAllLockerInMajor(FindAllLockerInMajorRequestDto build);
 
-    void modifyLockerInfo(ModifyLockerInfoReqeustDto toReqeustDto) throws IOException;
 }

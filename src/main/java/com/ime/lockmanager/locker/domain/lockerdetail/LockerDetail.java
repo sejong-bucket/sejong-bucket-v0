@@ -2,12 +2,16 @@ package com.ime.lockmanager.locker.domain.lockerdetail;
 
 import com.ime.lockmanager.common.domain.BaseTimeEntity;
 import com.ime.lockmanager.locker.domain.locker.Locker;
+import com.ime.lockmanager.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
+import static com.ime.lockmanager.locker.domain.lockerdetail.LockerDetailStatus.NON_RESERVED;
+import static com.ime.lockmanager.locker.domain.lockerdetail.LockerDetailStatus.RESERVED;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,19 +26,35 @@ public class LockerDetail extends BaseTimeEntity {
     private String rowNum;
     private String columnNum;
     private String lockerNum;
-    @Enumerated(EnumType.STRING)
-    private LockerDetailStatus lockerDetailStatus;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "locker_id")
     private Locker locker;
 
-    public Long reserve(){
-        this.lockerDetailStatus = LockerDetailStatus.RESERVED;
-        return id;
-    }
+
     public Long cancel(){
-        this.lockerDetailStatus = LockerDetailStatus.NON_RESERVED;
+        this.user.cancelRegister();
+        this.user = null;
         return this.id;
+    }
+
+    public void register(User user){
+        this.user = user;
+        user.registerLockerDetail(this);
+    }
+
+    public boolean isReserve(){
+        return this.user != null;
+    }
+
+    public LockerDetailStatus getLockerStatus(){
+        if(isReserve()){
+            return RESERVED;
+        }
+        return NON_RESERVED;
     }
 }

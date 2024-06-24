@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @Builder
 public class FindAllLockerInMajorRequestDto {
-    private Long userId;
+    private Long majorId;
 }

@@ -21,8 +21,6 @@ import com.ime.lockmanager.major.domain.Major;
 import com.ime.lockmanager.major.domain.MajorDetail;
 import com.ime.lockmanager.reservation.application.port.in.req.ChangeReservationRequestDto;
 import com.ime.lockmanager.reservation.application.port.out.ReservationCommandPort;
-import com.ime.lockmanager.reservation.application.port.out.ReservationQueryPort;
-import com.ime.lockmanager.reservation.domain.Reservation;
 import com.ime.lockmanager.user.application.port.out.UserCommandPort;
 import com.ime.lockmanager.user.application.port.out.UserQueryPort;
 import com.ime.lockmanager.user.domain.Role;

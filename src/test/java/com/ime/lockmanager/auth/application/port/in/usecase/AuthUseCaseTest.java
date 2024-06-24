@@ -1,17 +1,11 @@
 package com.ime.lockmanager.auth.application.port.in.usecase;
 
 import com.ime.lockmanager.auth.application.port.in.req.LoginRequestDto;
-import com.ime.lockmanager.locker.application.port.in.req.LockerCreateRequestDto;
-import com.ime.lockmanager.locker.application.port.in.req.LockerRegisterRequestDto;
-import com.ime.lockmanager.locker.application.port.in.res.LockerCreateResponseDto;
-import com.ime.lockmanager.locker.domain.lockerdetail.LockerDetail;
 import com.ime.lockmanager.major.application.port.out.major.MajorCommandPort;
 import com.ime.lockmanager.major.application.port.out.majordetail.MajorDetailCommandPort;
 import com.ime.lockmanager.major.domain.Major;
 import com.ime.lockmanager.major.domain.MajorDetail;
-import com.ime.lockmanager.reservation.domain.Reservation;
 import com.ime.lockmanager.user.application.port.out.UserQueryPort;
-import com.ime.lockmanager.user.domain.Role;
 import com.ime.lockmanager.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -22,16 +16,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-import static com.ime.lockmanager.locker.adapter.in.req.NumberIncreaseDirection.DOWN;
-import static com.ime.lockmanager.user.domain.UserState.ATTEND;
 import static com.ime.lockmanager.user.domain.UserTier.MEMBER;
 import static java.time.LocalDateTime.now;
 

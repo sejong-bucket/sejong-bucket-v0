@@ -1,6 +1,5 @@
 package com.ime.lockmanager.user.application.port.out.res;
 
-import com.ime.lockmanager.reservation.domain.Reservation;
 import com.ime.lockmanager.user.adapter.in.res.ReservationInfo;
 import com.ime.lockmanager.user.adapter.in.res.UserInfo;
 import com.ime.lockmanager.user.adapter.in.res.UserInfoAdminResponse;
@@ -54,19 +53,6 @@ public class AllUserInfoForAdminResponseDto {
                         .lockerName(lockerName)
                         .lockerNum(lockerNum)
                         .build())
-                .build();
-    }
-
-    public static AllUserInfoForAdminResponseDto of(User user, Optional<Reservation> reservation) {
-        String lockerNum = reservation.map(r -> r.getLockerDetail().getLockerNum()).orElse(null);
-        String lockerName = reservation.map(r -> r.getLockerDetail().getLocker().getName()).orElse(null);
-        return AllUserInfoForAdminResponseDto.builder()
-                .userId(user.getId())
-                .studentNum(user.getStudentNum())
-                .role(user.getRole())
-                .name(user.getName())
-                .lockerName(lockerName)
-                .lockerNum(lockerNum)
                 .build();
     }
 }

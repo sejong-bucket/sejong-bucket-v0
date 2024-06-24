@@ -55,17 +55,4 @@ class LockerAdminController {
                         .build()
         );
     }
-
-    @ApiOperation(
-            value = "사물함 정보 수정",
-            notes = "사물함의 여러 정보를 수정하는 api"
-    )
-    @PatchMapping("/lockers/{lockerId}")
-    public SuccessResponse modifyLockerInfo(@ApiIgnore Authentication authentication,
-                                            @PathVariable Long lockerId,
-                                            @RequestPart(required = false) MultipartFile image,
-                                            @Valid @RequestPart ModifyLockerInfoReqeust modifyLockerInfoReqeust) throws IOException {
-        lockerUseCase.modifyLockerInfo(modifyLockerInfoReqeust.toReqeustDto(lockerId,image));
-        return SuccessResponse.ok();
-    }
 }

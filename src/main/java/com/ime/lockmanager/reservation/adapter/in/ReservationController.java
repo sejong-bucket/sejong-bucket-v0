@@ -62,23 +62,4 @@ public class ReservationController {
                 lockerRegisterResponse.getLockerDetailNum());
         return new SuccessResponse(lockerRegisterResponse);
     }
-
-    @ApiOperation(
-            value = "사물함 예약변경",
-            notes = "사용자가 다른 사물함으로 변경을 희망할때 사용하는 API"
-    )
-    @PatchMapping("/users/{userId}/majors/{majorId}/lockerDetail/{originLockerDtailId}/reservations/change")
-    public SuccessResponse<ChangeReservationResponse> changeReservation(@ApiIgnore Principal principal,
-                                                                        @PathVariable Long userId,
-                                                                        @PathVariable Long originLockerDtailId,
-                                                                        @PathVariable Long majorId,
-                                                                        @RequestParam Long newLockerDetailId) {
-        log.info("{} : 사물함 취소", principal.getName());
-        Long changedLockerDetailId = reservationCommandUseCase.changeReservation(
-                ChangeReservationRequestDto.of(newLockerDetailId, originLockerDtailId, userId, majorId)
-        );
-        return new SuccessResponse(ChangeReservationResponse.builder()
-                .changeLockerId(changedLockerDetailId)
-                .build());
-    }
 }

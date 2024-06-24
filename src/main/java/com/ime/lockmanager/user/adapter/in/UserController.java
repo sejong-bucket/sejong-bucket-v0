@@ -3,17 +3,12 @@ package com.ime.lockmanager.user.adapter.in;
 import com.ime.lockmanager.common.format.success.SuccessResponse;
 import com.ime.lockmanager.user.adapter.in.res.UserInfoResponse;
 import com.ime.lockmanager.user.application.port.in.UserQueryUseCase;
-import com.ime.lockmanager.user.application.port.in.UserCommandUseCase;
 import com.ime.lockmanager.user.application.port.in.req.UserInfoRequestDto;
 import com.ime.lockmanager.user.application.port.out.res.UserInfoQueryResponseDto;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
-
-import java.security.Principal;
 
 @Slf4j
 @RequiredArgsConstructor

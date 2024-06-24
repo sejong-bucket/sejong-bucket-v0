@@ -17,7 +17,7 @@ public class LockersInfoInMajorDto {
     @Schema(description = "사물함을 예약할수 있는 학생회비 납부조건")
     private List<String> permitTiers;
     @Schema(description = "사물함을 예약할수 있는 학생의 재학조건")
-    private List<String> permitStates;
+    private String permitStates;
     @Schema(description = "사물함 이름")
     private String name;
     @Schema(description = "예약 시작시간")
