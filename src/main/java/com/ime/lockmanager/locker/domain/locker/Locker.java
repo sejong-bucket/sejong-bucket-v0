@@ -34,8 +34,6 @@ public class Locker extends BaseTimeEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "major_id")
     private Major major;
-
-    private String imageUrl;
     private String totalRow;
     private String totalColumn;
 
@@ -50,8 +48,9 @@ public class Locker extends BaseTimeEntity {
             @AttributeOverride(name = "id", column = @Column(name = "id", nullable = false))
     })
     @Column(name = "permitUserState")*/
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private UserState permitUserState;
+    private UserState permitUserState=UserState.ATTEND;
 
     public void modifiedDateTime(Period period) {
         this.period = period;
@@ -65,8 +64,6 @@ public class Locker extends BaseTimeEntity {
                 .major(lockercreateDto.getMajor())
                 .totalColumn(lockercreateDto.getTotalColumn())
                 .totalRow(lockercreateDto.getTotalRow())
-                .imageUrl(lockercreateDto.getImageUrl())
-                .permitUserState(UserState.ATTEND)
                 .build();
     }
 

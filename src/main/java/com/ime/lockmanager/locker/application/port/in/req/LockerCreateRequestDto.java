@@ -22,8 +22,6 @@ public class LockerCreateRequestDto {
     private String lockerName;
     private String totalRow;
     private String totalColumn;
-    /*private MultipartFile image;*/
-    private List<UserState> userStates;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startReservationTime;
@@ -39,9 +37,7 @@ public class LockerCreateRequestDto {
                 .totalColumn(lockerCreateRequest.getTotalColumn())
                 .startReservationTime(lockerCreateRequest.getStartReservationTime())
                 .endReservationTime(lockerCreateRequest.getEndReservationTime())
-//                .image(image)
                 .numberIncreaseDirection(lockerCreateRequest.getNumberIncreaseDirection())
-                .userStates(List.of(UserState.ATTEND))
                 .build();
     }
 
@@ -50,11 +46,9 @@ public class LockerCreateRequestDto {
                 .totalRow(this.getTotalRow())
                 .totalColumn(this.getTotalColumn())
                 .lockerName(this.getLockerName())
-                .userStates(this.userStates)
                 .startReservationTime(this.getStartReservationTime())
                 .endReservationTime(this.getEndReservationTime())
                 .major(major)
-//                .imageUrl(imageUrl)
                 .build();
     }
 }

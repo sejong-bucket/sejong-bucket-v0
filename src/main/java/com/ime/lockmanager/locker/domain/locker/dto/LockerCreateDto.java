@@ -16,8 +16,6 @@ public class LockerCreateDto {
     private String lockerName;
     private String totalRow;
     private String totalColumn;
-    private String imageUrl;
-    private List<UserState> userStates;
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startReservationTime;
 

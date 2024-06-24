@@ -55,7 +55,6 @@ class LockerService implements LockerUseCase {
                         .totalColumn(locker.getTotalColumn())
                         .totalRow(locker.getTotalRow())
                         .permitStates(locker.getPermitUserState())
-                        .image(locker.getImageUrl())
                         .name(locker.getName())
                         .build())
                 .collect(Collectors.toList());
@@ -108,7 +107,6 @@ class LockerService implements LockerUseCase {
                 .totalColumn(locker.getTotalColumn())
                 .totalRow(locker.getTotalRow())
                 .permitStates(locker.getPermitUserState().getName())
-                .image(locker.getImageUrl())
                 .build();
     }
 
