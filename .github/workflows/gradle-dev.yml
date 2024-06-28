@@ -68,9 +68,8 @@ jobs:
           envs: GITHUB_SHA
           script: |
             sudo docker rm -f ime-dev
-            sudo docker pull redis
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.PROJECT_NAME }}
-            docker run -d -p 8080:8080 --name ime-dev jaepyo99/lockermanager
+            docker run --restart=always -d -p 8080:8080 --name ime-dev jaepyo99/lockermanager
             docker image prune -f
 
   current-time:
