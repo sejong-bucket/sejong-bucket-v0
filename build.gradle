@@ -149,6 +149,12 @@ dependencies {
 	//spring-actuator
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+	//sqs
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.1.RELEASE'
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-aws-messaging', version: '2.2.3.RELEASE'
+
+	// 반드시 추가!!!!
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-aws-autoconfigure', version: '2.2.3.RELEASE'
 }
 
 // Querydsl 설정부

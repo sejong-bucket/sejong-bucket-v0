@@ -10,7 +10,7 @@ import javax.annotation.PreDestroy;
 import java.io.IOException;
 
 @Slf4j
-@Configuration
+//@Configuration
 public class EmbeddedRedisConfig {
     private RedisServer redisServer;
     @Value("${spring.redis.port}")

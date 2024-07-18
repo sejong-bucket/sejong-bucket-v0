@@ -2,6 +2,8 @@ package com.ime.lockmanager.reservation.application.port.in;
 
 import com.ime.lockmanager.locker.adapter.in.res.LockersInfoInMajorResponse;
 import com.ime.lockmanager.locker.adapter.in.res.dto.LockersInfoDto;
+import com.ime.lockmanager.locker.adapter.out.LockerDetailJpaRepository;
+import com.ime.lockmanager.locker.adapter.out.LockerJpaRepository;
 import com.ime.lockmanager.locker.application.port.in.LockerUseCase;
 import com.ime.lockmanager.locker.application.port.in.req.FindAllLockerInMajorRequestDto;
 import com.ime.lockmanager.locker.application.port.in.req.LockerCreateRequestDto;
@@ -19,11 +21,14 @@ import com.ime.lockmanager.major.application.port.out.majordetail.MajorDetailCom
 import com.ime.lockmanager.major.domain.Major;
 import com.ime.lockmanager.major.domain.MajorDetail;
 import com.ime.lockmanager.reservation.application.port.in.req.ChangeReservationRequestDto;
+import com.ime.lockmanager.user.adapter.out.UserJpaRepository;
 import com.ime.lockmanager.user.application.port.out.UserCommandPort;
 import com.ime.lockmanager.user.domain.Role;
 import com.ime.lockmanager.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -55,35 +60,34 @@ class ReservationCommandUseCaseTest {
     @Autowired
     private ReservationCommandUseCase reservationCommandUseCase;
     @Autowired
-    LockerDetailCommandPort lockerDetailCommandPort;
-    @Autowired
-    LockerCommandPort lockerCommandPort;
-    @Autowired
     UserCommandPort userCommandPort;
+
     @Autowired
-    MajorCommandPort majorCommandPort;
+    LockerDetailJpaRepository lockerDetailJpaRepository;
+    @Autowired
+    LockerJpaRepository lockerJpaRepository;
+    @Autowired
+    UserJpaRepository userJpaRepository;
     @Autowired
     MajorJpaRepository majorJpaRepository;
     @Autowired
     MajorDetailJpaRepository majorDetailJpaRepository;
-    @Autowired
-    MajorDetailCommandPort majorDetailCommandPort;
 
     @BeforeEach
     void init() {
         log.info("------------------1");
-        lockerDetailCommandPort.deleteAll();
-        lockerCommandPort.deleteAll();
-        userCommandPort.deleteAll();
+        lockerDetailJpaRepository.deleteAll();
+        lockerJpaRepository.deleteAll();
+        userJpaRepository.deleteAll();
         majorDetailJpaRepository.deleteAll();
         majorJpaRepository.deleteAll();
         log.info("------------------1");
     }
 
-    @DisplayName("여러명이 동시에 같은 사물함을 예약할때 데이터 정합성테스트")
+    @DisplayName("여러 명이 동시에 같은 사물함을 예약할 때 데이터 정합성 테스트")
     @Test
     void reserveConcurrencyTest() throws InterruptedException, IOException {
-        //given
+        // given
         log.info("동시성 테스트 준비");
         Major major = majorJpaRepository.save(Major.builder().name("AI로봇학과").build());
         MajorDetail majorDetail = majorDetailJpaRepository.save(
@@ -92,7 +96,7 @@ class ReservationCommandUseCaseTest {
 
         log.info("사용자 생성");
         for (int i = 0; i < 100; i++) {
-            String name = "testname " + Integer.toString(i);
+            String name = "testname " + i;
             Role role = Role.ROLE_USER;
             String studentNum = Integer.toString(19011721 + i);
             User save = userCommandPort.save(
@@ -120,41 +124,40 @@ class ReservationCommandUseCaseTest {
                 .numberIncreaseDirection(DOWN)
                 .build(), major.getId());
 
-        List<LockerDetail> lockerDetails = lockerDetailQueryPort
-                .findByLockerId(savedLocker.getCreatedLockerId());
+        List<LockerDetail> lockerDetails = lockerDetailQueryPort.findByLockerId(savedLocker.getCreatedLockerId());
 
-        int numberOfThread = 100;
+        int numberOfThread = 1000;
         ExecutorService service = Executors.newFixedThreadPool(numberOfThread);
         CountDownLatch countDownLatch = new CountDownLatch(numberOfThread);
 
-        //when
+        // when
         log.info("lockerReserve 동시성 테스트 진행");
         long startTime = System.currentTimeMillis();
 
         for (Long userId : userIds) {
-            service.execute(
-                    () -> {
-                        try {
-                            reservationCommandUseCase.reserveForUser(LockerRegisterRequestDto.builder()
-                                    .userId(userId)
-                                    .lockerDetailId(lockerDetails.get(0).getId())
-                                    .majorId(major.getId())
-                                    .build());
-
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        } finally {
-                            countDownLatch.countDown();
-                        }
-                    }
-            );
+            service.execute(() -> {
+                try {
+                    reservationCommandUseCase.reserveForUser(LockerRegisterRequestDto.builder()
+                            .userId(userId)
+                            .lockerDetailId(lockerDetails.get(0).getId())
+                            .majorId(major.getId())
+                            .build());
+                } catch (Exception e) {
+                    log.error("예외 발생", e); // 예외 로그 기록
+                    throw new RuntimeException(e);
+                } finally {
+                    countDownLatch.countDown();
+                }
+            });
         }
 
         countDownLatch.await();
+        service.shutdown(); // 스레드 풀 종료
+
         long stopTime = System.currentTimeMillis();
         System.out.println("코드 실행 시간: " + (stopTime - startTime));
 
-        //then
+        // then
         log.info("lockerReserve 동시성 테스트 검증");
         int count = 0;
 
@@ -170,7 +173,8 @@ class ReservationCommandUseCaseTest {
 
         log.info("끝났다~~");
         Assertions.assertThat(count).isEqualTo(1);
-        log.info("검증됬다~~~~");
+        log.info("검증됐다~~~~");
     }
+
 
 }

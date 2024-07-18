@@ -1,9 +1,13 @@
 package com.ime.lockmanager.locker.application.port.in.req;
 
 import com.ime.lockmanager.locker.application.port.in.res.LockerRegisterResponseDto;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Builder
 public class LockerRegisterRequestDto {
