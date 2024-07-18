@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SqsTransferListener {
     private final ObjectMapper mapper;
+    private final ReservationCommandService reservationCommandService;
 
     @SqsListener(value = "${cloud.aws.sqs.queue-name}")
-    public void messageListener(String message) throws JsonProcessingException {
+    public void messageListener(String message) throws Exception {
         LockerRegisterRequestDto requestDto = mapper.readValue(message, LockerRegisterRequestDto.class);
         System.out.println("Listener: " + requestDto.getMajorId());
+        reservationCommandService.reserveForUser(requestDto);
     }
 }
