@@ -52,6 +52,7 @@ public class ReservationCommandService implements ReservationCommandUseCase {
     }
 
     @Override
+    @DistributeLock(identifier = LOCKER_KEY, key = "#dto.lockerDetailId")
     @ReserveLock(identifier = LOCKER_KEY, key = "#dto.lockerDetailId")
     public LockerRegisterResponseDto reserveForUser(LockerRegisterRequestDto dto) throws Exception {
         User user = getUserById(dto.getUserId());

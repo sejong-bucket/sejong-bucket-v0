@@ -43,7 +43,7 @@ public class ReservationController {
     }
 
     //사물함 예약하는 api
-    @ApiOperation(
+    /*@ApiOperation(
             value = "사물함 예약",
             notes = "사용자가 사물함을 선택할시 해당 사물함을 예약하는 API"
     )
@@ -61,5 +61,5 @@ public class ReservationController {
                 lockerRegisterResponse.getLockerName(),
                 lockerRegisterResponse.getLockerDetailNum());
         return new SuccessResponse(lockerRegisterResponse);
-    }
+    }*/
 }

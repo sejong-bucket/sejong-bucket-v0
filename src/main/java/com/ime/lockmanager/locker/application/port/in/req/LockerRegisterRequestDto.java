@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LockerRegisterRequestDto {
 
-    private Long userId;
-    private Long majorId;
-    private Long lockerDetailId;
+        private Long userId;
+        private Long majorId;
+        private Long lockerDetailId;
 
     public static LockerRegisterRequestDto of(Long majorId,Long userId,Long lockerDetailId){
         return LockerRegisterRequestDto.builder()
