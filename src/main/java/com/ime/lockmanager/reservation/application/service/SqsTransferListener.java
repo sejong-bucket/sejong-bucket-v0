@@ -19,7 +19,7 @@ import java.util.List;
 public class SqsTransferListener {
     private final ObjectMapper mapper;
     private final ReservationCommandService reservationCommandService;
-    private final TestService testService;
+//    private final TestService testService;
     /*@Value("${cloud.aws.sqs.queue-name}")
     private String queueUrl;*/
     @SqsListener(value = "${cloud.aws.sqs.queue-name}")
