@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ime.lockmanager.locker.application.port.in.req.LockerRegisterRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.aws.messaging.listener.SqsMessageDeletionPolicy;
 import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class SqsTransferListener {
 //    private final TestService testService;
     /*@Value("${cloud.aws.sqs.queue-name}")
     private String queueUrl;*/
-    @SqsListener(value = "${cloud.aws.sqs.queue-name}")
+    @SqsListener(value = "${cloud.aws.sqs.queue-name}",deletionPolicy = SqsMessageDeletionPolicy.ALWAYS)
     public void messageListener(/*AmazonSQSClient sqsClient,*/String message) throws Exception {
 //        ReceiveMessageRequest receiveRequest = new ReceiveMessageRequest()
 //                .withQueueUrl(queueUrl)
